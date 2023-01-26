@@ -1,3 +1,6 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { _logout } from '$lib/actions';
+</script>
+
 <h1>we here</h1>
+<button on:click={_logout}>Logout</button>

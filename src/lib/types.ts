@@ -1,10 +1,17 @@
-export interface User {
-	id: number;
-	username: string;
-	name?: string;
-	email?: string;
-	is_email_verified: boolean;
-	phone_number?: string;
-	is_phone_number_verified: boolean;
-	date_joined: Date;
+import type * as Model from './models';
+
+export interface APIResponse {
+	ok: boolean;
+	data?: object;
+}
+
+export interface LoginResponse {
+	refresh: string;
+	access: string;
+	user: Model.User;
+}
+
+export interface RefreshResponse {
+	access: string;
+	refresh: string;
 }
