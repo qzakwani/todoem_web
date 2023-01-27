@@ -39,5 +39,3 @@ export async function _refresh(): Promise<boolean> {
 		return false;
 	}
 }
-
-// todo Write a middle ware for re login
