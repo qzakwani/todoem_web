@@ -8,10 +8,12 @@
 	box-sizing: border-box;
 
 	font-family: 'Roboto', sans-serif;
+	color: var(--txt-clr);
 }
 
 :root {
-	--primary-clr: #14213d;
+	--dark-primary-clr: #14213d;
+	--primary-clr: #2c4577;
 	--secondary-clr: #fca311;
 	--danger-clr: crimson;
 	--success-clr: #4caf50;
@@ -23,9 +25,11 @@
 }
 
 :root[theme='light'] {
+	--txt-clr: black;
 	--bg-clr: white;
 	--bg-clr-sec: #fafafa;
 	--divider-clr: #eeeeee;
+	--header-clr: var(--primary-clr);
 
 	--btn-bg: var(--primary-clr);
 	--btn-txt-clr: white;
@@ -33,6 +37,27 @@
 	--btn-txt-clr-sec: black;
 
 	--input-border-focus-clr: var(--primary-clr);
+
+	--menu-btn-txt-selected: var(--primary-clr);
+	--menu-btn-clr-hover: #2c457723;
+}
+
+:root[theme='dark'] {
+	--txt-clr: white;
+	--bg-clr: black;
+	--bg-clr-sec: #191919;
+	--divider-clr: #606060;
+	--header-clr: var(--dark-primary-clr);
+
+	--btn-bg: var(--primary-clr);
+	--btn-txt-clr: white;
+	--btn-bg-sec: var(--secondary-clr);
+	--btn-txt-clr-sec: black;
+
+	--input-border-focus-clr: var(--dark-primary-clr);
+
+	--menu-btn-txt-selected: white;
+	--menu-btn-clr-hover: #2c457723;
 }
 
 main {
@@ -49,6 +74,7 @@ button {
 
 .card {
 	border-radius: 4px;
+	background-color: var(--bg-clr-sec);
 	box-shadow: 0 3px 1px -2px rgb(0 0 0 / 20%), 0 2px 2px 0 rgb(0 0 0 / 14%),
 		0 1px 5px 0 rgb(0 0 0 / 12%);
 }
@@ -66,4 +92,19 @@ input[type='password'] {
 input[type='text']:focus,
 input[type='password']:focus {
 	border: 1px solid var(--input-border-focus-clr);
+}
+
+::-webkit-scrollbar-track {
+	/* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+	background-color: var(--divider-clr);
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	background-color: var(--divider-clr);
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: var(--primary-clr);
+	/* border: 2px solid #555555; */
 }

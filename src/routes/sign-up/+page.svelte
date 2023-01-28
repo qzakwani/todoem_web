@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { Button } from '$lib/components/general/index';
+	import { goto } from '$app/navigation';
+	import { Button } from '$lib/components/index';
 	import _signUp from './actions';
 	let elem: HTMLFormElement;
 	let pass1: string;
@@ -46,6 +47,7 @@
 					type="text"
 					name="username"
 					required
+					placeholder="3 characters or more"
 					bind:value={username}
 					bind:this={valid}
 					on:keyup={checkUsername}
@@ -58,6 +60,7 @@
 					name="password"
 					required
 					minLength="6"
+					placeholder="6 characters or more"
 					bind:value={pass1}
 					bind:this={pass}
 					on:keyup={checkPass}
@@ -76,6 +79,9 @@
 			</div>
 
 			<div class="btns">
+				<Button type="button" secondary outlined float={false} on:click={() => goto('login')}
+					>Login</Button
+				>
 				<Button>Create</Button>
 			</div>
 		</form>
@@ -110,6 +116,7 @@
 	}
 
 	.btns {
-		text-align: right;
+		display: inline-flex;
+		justify-content: space-between;
 	}
 </style>
