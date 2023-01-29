@@ -1,9 +1,22 @@
 import { writable } from 'svelte/store';
 import type { User } from './models';
+import type { Credentials } from './types';
 import { browser } from '$app/environment';
 
 export const user = writable<User | null>(getUser());
 export const isLoggedIn = writable(_isLoggedIn());
+export const credentials = writable<Credentials | null>(getCredentials());
+
+function getCredentials() {
+	if (browser) {
+		return {
+			access: localStorage.getItem('access') as string,
+			refresh: localStorage.getItem('refresh') as string,
+			uid: localStorage.getItem('uid') as string
+		};
+	}
+	return null;
+}
 
 function _isLoggedIn() {
 	if (browser) {

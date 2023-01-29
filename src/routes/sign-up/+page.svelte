@@ -10,6 +10,8 @@
 	let pass: HTMLInputElement;
 	let matching: HTMLInputElement;
 
+	// $: validUsername = username.length >= 3;
+
 	function checkUsername() {
 		valid.style.border =
 			username.length >= 3 ? '1px solid var(--success-clr)' : '1px solid var(--danger-clr)';
@@ -82,7 +84,7 @@
 				<Button type="button" secondary outlined float={false} on:click={() => goto('login')}
 					>Login</Button
 				>
-				<Button>Create</Button>
+				<Button disabled={false}>Create</Button>
 			</div>
 		</form>
 	</article>

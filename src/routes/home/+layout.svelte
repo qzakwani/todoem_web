@@ -18,7 +18,8 @@
 		dashboard: '/home',
 		tasks: '/home/tasks',
 		tasklist: '/home/tasklist',
-		taskgroup: '/home/taskgroup'
+		taskgroup: '/home/taskgroup',
+		account: '/home/account'
 	};
 
 	function changeTheme() {
@@ -42,7 +43,7 @@
 				</p>
 			</div>
 
-			<Avatar />
+			<Avatar on:click={() => goto(Paths.account)} />
 
 			<IconButton
 				icon={mdiThemeLightDark}

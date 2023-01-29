@@ -1,6 +1,10 @@
 import { PUBLIC_BASE_URL } from '$env/static/public';
-import { isLoggedIn, user } from './store';
-import type { RefreshResponse } from './types';
+import { isLoggedIn, user, credentials } from './store';
+import type { RefreshResponse, AuthAction, APIResponse } from './types';
+
+import { get } from 'svelte/store';
+
+const uid = get(credentials)?.uid as string; //todo add || getUser
 
 export async function _logout(): Promise<boolean> {
 	try {
@@ -15,11 +19,11 @@ export async function _logout(): Promise<boolean> {
 	}
 }
 
-export async function _refresh(): Promise<boolean> {
+export async function _refresh(action: AuthAction): Promise<APIResponse> {
 	const token = localStorage.getItem('refresh');
 	if (!token) {
 		await _logout();
-		return false;
+		return { ok: false, data: { message: 'logged out!' } };
 	}
 	const res = await fetch(PUBLIC_BASE_URL + '/account/login/refresh/', {
 		method: 'POST',
@@ -33,9 +37,33 @@ export async function _refresh(): Promise<boolean> {
 		const r = (await res.json()) as RefreshResponse;
 		localStorage.setItem('access', r.access);
 		localStorage.setItem('refresh', r.refresh);
-		return true;
+		credentials.set({ access: r.access, refresh: r.refresh, uid: uid });
+		return await action(1);
 	} else {
 		await _logout();
-		return false;
+		return { ok: false, data: { message: 'logged out!' } };
+	}
+}
+
+export async function authAction(path: string, method: string, body?: string | FormData) {
+	const res = await fetch(PUBLIC_BASE_URL + path, {
+		method: method,
+		headers: {
+			Authorization: 'Bearer ' + get(credentials)?.access
+		},
+		body: body || null
+	});
+	return res;
+}
+
+export async function handelUnsuccessfulResponse(
+	res: Response,
+	action: AuthAction,
+	attempts: number
+): Promise<APIResponse> {
+	if (res.status === 401 && attempts === 0) {
+		return await _refresh(action);
+	} else {
+		return { ok: false, data: await res.json() };
 	}
 }

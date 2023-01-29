@@ -12,7 +12,7 @@
 }
 
 :root {
-	--dark-primary-clr: #14213d;
+	--dark-primary-clr: #0e1930;
 	--primary-clr: #2c4577;
 	--secondary-clr: #fca311;
 	--danger-clr: crimson;
@@ -54,7 +54,7 @@
 	--btn-bg-sec: var(--secondary-clr);
 	--btn-txt-clr-sec: black;
 
-	--input-border-focus-clr: var(--dark-primary-clr);
+	--input-border-focus-clr: var(--primary-clr);
 
 	--menu-btn-txt-selected: white;
 	--menu-btn-clr-hover: #2c457723;

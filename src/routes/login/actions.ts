@@ -22,6 +22,7 @@ async function handelLogin(res: Response): Promise<void> {
 	const data = (await res.json()) as LoginResponse;
 	localStorage.setItem('access', data.access);
 	localStorage.setItem('refresh', data.refresh);
+	localStorage.setItem('uid', data.user.id.toString());
 	localStorage.setItem('user', JSON.stringify(data.user));
 	user.set(data.user);
 	isLoggedIn.set(true);
