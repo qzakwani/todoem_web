@@ -19,7 +19,7 @@ export async function _logout(): Promise<boolean> {
 	}
 }
 
-export async function _refresh(action: AuthAction): Promise<APIResponse> {
+export async function _refresh<Type>(action: AuthAction, data?: Type): Promise<APIResponse> {
 	const token = localStorage.getItem('refresh');
 	if (!token) {
 		await _logout();
@@ -38,7 +38,7 @@ export async function _refresh(action: AuthAction): Promise<APIResponse> {
 		localStorage.setItem('access', r.access);
 		localStorage.setItem('refresh', r.refresh);
 		credentials.set({ access: r.access, refresh: r.refresh, uid: uid });
-		return await action(1);
+		return await action(data, 1);
 	} else {
 		await _logout();
 		return { ok: false, data: { message: 'logged out!' } };
@@ -56,13 +56,14 @@ export async function authAction(path: string, method: string, body?: string | F
 	return res;
 }
 
-export async function handelUnsuccessfulResponse(
+export async function handelUnsuccessfulResponse<Type>(
 	res: Response,
 	action: AuthAction,
-	attempts: number
+	attempts: number,
+	data?: Type
 ): Promise<APIResponse> {
 	if (res.status === 401 && attempts === 0) {
-		return await _refresh(action);
+		return await _refresh(action, data);
 	} else {
 		return { ok: false, data: await res.json() };
 	}

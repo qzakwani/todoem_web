@@ -4,7 +4,7 @@
 	import { _logout } from '$lib/actions';
 	import logo from '$lib/assets/logo.svg';
 	import { MenuButton, IconButton, Avatar } from '$lib/components/index';
-	import { isLoggedIn } from '$lib/store';
+	import { isLoggedIn, theme } from '$lib/store';
 	import { browser } from '$app/environment';
 	import {
 		mdiHome,
@@ -23,9 +23,10 @@
 	};
 
 	function changeTheme() {
-		const theme = document.documentElement.getAttribute('theme') === 'light' ? 'dark' : 'light';
-		document.documentElement.setAttribute('theme', theme);
-		localStorage.setItem('theme', theme);
+		const _theme = document.documentElement.getAttribute('theme') === 'light' ? 'dark' : 'light';
+		document.documentElement.setAttribute('theme', _theme);
+		localStorage.setItem('theme', _theme);
+		theme.set(_theme);
 	}
 
 	$: if (browser && !$isLoggedIn) {
@@ -124,6 +125,7 @@
 	}
 
 	article {
+		position: relative;
 		padding: 1rem;
 		overflow: auto;
 	}

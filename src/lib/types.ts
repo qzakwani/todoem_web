@@ -32,4 +32,4 @@ export interface Credentials {
 	uid: string;
 }
 
-export type AuthAction = (attempts?: number) => Promise<APIResponse>;
+export type AuthAction = <Type>(data: Type, attempts: number) => Promise<APIResponse>;

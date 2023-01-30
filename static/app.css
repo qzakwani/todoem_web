@@ -12,7 +12,7 @@
 }
 
 :root {
-	--dark-primary-clr: #0e1930;
+	--dark-primary-clr: #0b1427;
 	--primary-clr: #2c4577;
 	--secondary-clr: #fca311;
 	--danger-clr: crimson;
@@ -80,7 +80,9 @@ button {
 }
 
 input[type='text'],
-input[type='password'] {
+input[type='password'],
+textarea,
+input[type='datetime-local'] {
 	background-color: var(--bg-clr-sec);
 	border: 1px solid var(--divider-clr);
 	border-radius: 4px;
@@ -90,7 +92,8 @@ input[type='password'] {
 }
 
 input[type='text']:focus,
-input[type='password']:focus {
+input[type='password']:focus,
+textarea:focus {
 	border: 1px solid var(--input-border-focus-clr);
 }
 

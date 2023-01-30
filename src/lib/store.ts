@@ -34,3 +34,15 @@ function getUser(): User | null | undefined {
 		return null;
 	}
 }
+
+export const theme = writable<string>(getTheme());
+
+function getTheme() {
+	if (browser) {
+		const t = localStorage.getItem('theme');
+		if (t) {
+			return t;
+		}
+	}
+	return 'light';
+}

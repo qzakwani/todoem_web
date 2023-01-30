@@ -3,6 +3,7 @@
 	import * as actions from './actions';
 	import type { APIError } from '$lib/types';
 	import { browser } from '$app/environment';
+	import AddTask from './AddTask.svelte';
 
 	let msg: string | undefined;
 
@@ -17,12 +18,14 @@
 	browser && setUp();
 </script>
 
+<AddTask />
+
 {#if $tasks === null}
 	<p class="error">{msg}</p>
 {:else if $tasks.length === 0}
 	<h1>No tasks</h1>
 {:else}
 	{#each $tasks as task}
-		{task.task}
+		<p>{task.task}</p>
 	{/each}
 {/if}

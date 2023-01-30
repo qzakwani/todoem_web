@@ -7,14 +7,17 @@
 	export let animate = false;
 	export let float = false;
 	export let outlined = false;
+	export let pure = false;
+	export let type: 'button' | 'submit' | 'reset' = 'button';
+	let style: string = 'background-color: ' + color;
+	if (outlined) {
+		style = 'background-color: transparent; border: 2px solid ' + color;
+	} else if (pure) {
+		style = 'background-color: transparent;';
+	}
 </script>
 
-<button
-	on:click
-	style="background-color: {outlined ? 'transparent' : color}; border: 2px solid {color}"
-	class:animate
-	class:float
->
+<button {type} on:click {style} class:animate class:float>
 	<Icon path={icon} color={icolor} {size} />
 </button>
 
