@@ -109,10 +109,11 @@
 	.container {
 		height: 100%;
 		display: grid;
-		grid-template-columns: 300px 1fr;
+		grid-template-columns: 260px 1fr;
 		grid-template-rows: max-content 1fr;
 		align-items: stretch;
 		overflow: hidden;
+		z-index: 1;
 	}
 
 	aside {
@@ -128,5 +129,20 @@
 		position: relative;
 		padding: 1rem;
 		overflow: auto;
+	}
+
+	@media only screen and (max-width: 850px) {
+		.container {
+			grid-template-columns: 1fr;
+			grid-template-rows: max-content max-content 1fr;
+		}
+
+		aside {
+			grid-column: 1/3;
+		}
+
+		article {
+			grid-column: 1/3;
+		}
 	}
 </style>

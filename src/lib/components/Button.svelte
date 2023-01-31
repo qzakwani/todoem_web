@@ -1,12 +1,20 @@
 <script lang="ts">
-	export let type: 'submit' | 'button' | 'reset' = 'submit';
+	export let type: 'submit' | 'button' | 'reset' = 'button';
 	export let secondary = false;
 	export let danger = false;
 	export let success = false;
 	export let outlined = false;
-	export let float = true;
-	export let animate = true;
+	export let float = false;
+	export let animate = false;
 	export let disabled = false;
+	export let text = false;
+	export let small = false;
+
+	export let color = '';
+	export let bg = '';
+
+	$: style = color ? 'color: ' + color : '';
+	style = style + (bg ? 'background: ' + bg : '');
 </script>
 
 <button
@@ -18,7 +26,10 @@
 	{type}
 	class:danger
 	class:success
+	class:text
+	class:small
 	{disabled}
+	{style}
 >
 	<slot />
 </button>
@@ -48,6 +59,13 @@
 	}
 	button:disabled:hover {
 		filter: none;
+	}
+
+	.text {
+		background: none;
+		color: var(--primary-clr);
+		border: none;
+		text-transform: capitalize;
 	}
 
 	.secondary {
@@ -103,6 +121,13 @@
 	.outlined.success {
 		background-color: transparent;
 		color: var(--btn-bg-success);
+	}
+
+	.small {
+		font-size: 0.75rem;
+		/* font-weight: 500; */
+		border-radius: 3px;
+		padding: 8px 12px;
 	}
 
 	.animate:focus {

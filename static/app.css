@@ -82,6 +82,7 @@ button {
 input[type='text'],
 input[type='password'],
 textarea,
+select,
 input[type='datetime-local'] {
 	background-color: var(--bg-clr-sec);
 	border: 1px solid var(--divider-clr);
@@ -93,7 +94,8 @@ input[type='datetime-local'] {
 
 input[type='text']:focus,
 input[type='password']:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
 	border: 1px solid var(--input-border-focus-clr);
 }
 
