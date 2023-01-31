@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { Button, Icon, MenuButton, IconButton } from '$lib/components/index';
+	import { Button, Checkbox, MenuButton, IconButton, Loading } from '$lib/components';
 	import { mdiHome } from '@mdi/js';
+
+	let comp = false;
 </script>
 
 <main>
@@ -25,6 +27,17 @@
 			icolor="var(--danger-clr)"
 			color="var(--danger-clr)"
 		/>
+
+		<br />
+		<Checkbox
+			id={1}
+			completed={comp}
+			on:change={() => {
+				comp = !comp;
+			}}
+		/>
+
+		<Loading />
 	</div>
 </main>
 

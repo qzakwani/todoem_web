@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { tasks } from '$lib/dataStore';
+	import { tasks, tempTasks } from '$lib/dataStore';
 	import * as actions from './actions';
 	import type { APIError } from '$lib/types';
 	import { browser } from '$app/environment';
 	import AddTask from './AddTask.svelte';
-
+	import Task from './Task.svelte';
 	let msg: string | undefined;
 
 	async function setUp() {
@@ -18,14 +18,28 @@
 	browser && setUp();
 </script>
 
-<AddTask />
-
 {#if $tasks === null}
 	<p class="error">{msg}</p>
 {:else if $tasks.length === 0}
 	<h1>No tasks</h1>
 {:else}
-	{#each $tasks as task}
-		<p>{task.task}</p>
-	{/each}
+	<div class="tasks">
+		{#each $tasks as task}
+			<Task {task} />
+		{/each}
+		{#each $tempTasks as tempTask}
+			<p>{tempTask}</p>
+		{/each}
+	</div>
 {/if}
+
+<AddTask />
+
+<style>
+	.tasks {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		margin-bottom: 100px;
+	}
+</style>

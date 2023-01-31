@@ -139,6 +139,9 @@
 
 		aside {
 			grid-column: 1/3;
+			border-right: none;
+
+			border-bottom: 5px solid var(--divider-clr);
 		}
 
 		article {

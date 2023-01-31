@@ -18,6 +18,7 @@ export async function _getTasks<Type>(data?: Type, attempts = 0): Promise<APIRes
 }
 
 export async function _addTask<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	await new Promise((resolve) => setTimeout(resolve, 5000));
 	const res = await authAction('task/create/', 'POST', data as FormData);
 	if (res.status < 300) {
 		const task = (await res.json()) as Task;

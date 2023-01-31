@@ -8,13 +8,14 @@
 	import { browser } from '$app/environment';
 	let msg: string | undefined;
 	let form: HTMLFormElement;
-	let active = true;
+	let active = false;
 	let repeat = false;
 	let due = false;
 	let desc = false;
 	async function submit() {
 		const data = new FormData(form);
 		repeat = due = desc = false;
+		form.reset();
 		const res = await _addTask(data);
 	}
 
@@ -118,7 +119,7 @@
 
 <style>
 	section {
-		position: absolute;
+		position: sticky;
 		right: 32px;
 		bottom: 32px;
 		width: calc(100% - 32px);
