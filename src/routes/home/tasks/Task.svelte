@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Checkbox } from '$lib/components';
+	import { Checkbox, Loading } from '$lib/components';
 	import type { Task } from '$lib/models';
 	import { localizeDate, isPassed } from '$lib/utils/date_utils';
-	export let task: Task;
+	export let task: Task | string;
 
 	function getRF(f: string) {
 		switch (f) {
@@ -18,34 +18,40 @@
 	}
 </script>
 
-<section class="card task">
-	<span>
-		<Checkbox id={task.id} completed={task.completed} />
-	</span>
-	<div class="info">
-		<p>{task.task}</p>
-		<div class="extra">
-			{#if task.due}
-				<p class:passed={isPassed(task.due)} class="d-r">
-					{#if !isPassed(task.due)}
-						<span>Due by </span> {localizeDate(task.due)}
-					{:else}
-						<span>Passed </span> {localizeDate(task.due)}
-					{/if}
-				</p>
-			{/if}
-			{#if task.repeat}
-				<p class="d-r"><span>Repeat </span> {getRF(task.repeat_frequency)}</p>
+<section class="card container">
+	{#if typeof task === 'string'}
+		<Loading size={24} />
+		<p class="task">{task}</p>
+	{:else}
+		<!-- else content here -->
+		<span>
+			<Checkbox id={task.id} completed={task.completed} />
+		</span>
+		<div class="info">
+			<p class="task">{task.task}</p>
+			<div class="extra">
+				{#if task.due}
+					<p class:passed={isPassed(task.due)} class="d-r">
+						{#if !isPassed(task.due)}
+							<span>Due by </span> {localizeDate(task.due)}
+						{:else}
+							<span>Passed </span> {localizeDate(task.due)}
+						{/if}
+					</p>
+				{/if}
+				{#if task.repeat}
+					<p class="d-r"><span>Repeat </span> {getRF(task.repeat_frequency)}</p>
+				{/if}
+			</div>
+			{#if task.description}
+				<p class="desc">{task.description}</p>
 			{/if}
 		</div>
-		{#if task.description}
-			<p class="desc">{task.description}</p>
-		{/if}
-	</div>
+	{/if}
 </section>
 
 <style>
-	.task {
+	.container {
 		display: flex;
 		align-items: center;
 		gap: 16px;

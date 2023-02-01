@@ -2,7 +2,7 @@ import type * as Model from './models';
 
 export interface APIResponse {
 	ok: boolean;
-	data?: AuthError | APIError | FieldError[] | object;
+	data?: AuthError | APIError | FieldError[] | Record<string, string | number>;
 }
 
 export interface APIError {
