@@ -8,10 +8,10 @@ import { ruid } from '$lib/utils';
 
 export async function _getTasks<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
 	if (get(tasks) !== null) {
-		return { ok: false };
+		return { ok: true };
 	}
 	const res = await authAction('task/list/', 'GET');
-	if (res.status < 300) {
+	if (res && res.status < 300) {
 		const temp: Record<string, Task> = {};
 		for (const task of (await res.json()) as Task[]) {
 			temp[task.id.toString()] = task;
@@ -35,7 +35,7 @@ export async function _addTask<Type>(data?: Type, attempts = 0): Promise<APIResp
 		return n;
 	});
 	const res = await authAction('task/create/', 'POST', _data);
-	if (res.status < 300) {
+	if (res && res.status < 300) {
 		const task = (await res.json()) as Task;
 		tasks.update((n) => {
 			if (n !== null) {
@@ -64,7 +64,7 @@ export async function _complete<Type>(data?: Type, attempts = 0): Promise<APIRes
 	});
 
 	const res = await authAction('task/complete/' + tid + '/', 'POST');
-	if (res.status < 300) {
+	if (res && res.status < 300) {
 		return { ok: true };
 	} else {
 		tasks.update((n) => {
@@ -90,7 +90,7 @@ export async function _uncomplete<Type>(data?: Type, attempts = 0): Promise<APIR
 	});
 
 	const res = await authAction('task/complete/' + tid + '/', 'POST');
-	if (res.status < 300) {
+	if (res && res.status < 300) {
 		return { ok: true };
 	} else {
 		tasks.update((n) => {
@@ -115,9 +115,8 @@ export async function _delete<Type>(data?: Type, attempts = 0): Promise<APIRespo
 		}
 		return n;
 	});
-
 	const res = await authAction('task/delete/' + tid + '/', 'DELETE');
-	if (res.status < 300) {
+	if (res && res.status < 300) {
 		return { ok: true };
 	} else {
 		tasks.update((n) => {
@@ -134,7 +133,7 @@ export async function _deleteAll<Type>(data?: Type, attempts = 0): Promise<APIRe
 	const ta = get(tasks);
 	tasks.set({});
 	const res = await authAction('task/delete-all/', 'DELETE');
-	if (res.status < 300) {
+	if (res && res.status < 300) {
 		return { ok: true };
 	} else {
 		tasks.set(ta);

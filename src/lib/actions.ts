@@ -45,26 +45,36 @@ export async function _refresh<Type>(action: AuthAction, data?: Type): Promise<A
 	}
 }
 
-export async function authAction(path: string, method: string, body?: string | FormData) {
-	const res = await fetch(PUBLIC_BASE_URL + path, {
-		method: method,
-		headers: {
-			Authorization: 'Bearer ' + get(credentials)?.access
-		},
-		body: body || null
-	});
-	return res;
+export async function authAction(
+	path: string,
+	method: string,
+	body?: string | FormData
+): Promise<Response | null> {
+	try {
+		const res = await fetch(PUBLIC_BASE_URL + path, {
+			method: method,
+			headers: {
+				Authorization: 'Bearer ' + get(credentials)?.access
+			},
+			body: body || null
+		});
+		return res;
+	} catch (error) {
+		return null;
+	}
 }
 
 export async function handelUnsuccessfulResponse<Type>(
-	res: Response,
+	res: Response | null,
 	action: AuthAction,
 	attempts: number,
 	data?: Type
 ): Promise<APIResponse> {
-	if (res.status === 401 && attempts === 0) {
+	if (res && res.status === 401 && attempts === 0) {
 		return await _refresh(action, data);
-	} else {
+	} else if (res) {
 		return { ok: false, data: await res.json() };
+	} else {
+		return { ok: false, data: 'client' };
 	}
 }
