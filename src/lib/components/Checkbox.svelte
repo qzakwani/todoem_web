@@ -11,7 +11,7 @@
 <label for={id.toString()}>
 	<div class="box" class:completed>
 		{#if completed}
-			<div class="check" transition:scale={{ duration: 500, easing: quintOut }}>
+			<div class="check" in:scale={{ duration: 500, easing: quintOut }}>
 				<Icon {path} color="white" />
 			</div>
 		{/if}

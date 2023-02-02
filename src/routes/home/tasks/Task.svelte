@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { Checkbox, Loading } from '$lib/components';
+	import { Checkbox, Loading, IconButton } from '$lib/components';
 	import type { Task } from '$lib/models';
 	import { localizeDate, isPassed } from '$lib/utils/date_utils';
-	export let task: Task | string;
+	import { mdiTrashCanOutline } from '@mdi/js';
+	import { _complete, _delete, _uncomplete } from './actions';
+	export let task: Task | string | any;
+	export let id: string;
 
 	function getRF(f: string) {
 		switch (f) {
@@ -16,6 +19,18 @@
 				return '';
 		}
 	}
+
+	async function complete(key: string, isComplete: boolean) {
+		if (!isComplete) {
+			await _complete(key);
+		} else {
+			await _uncomplete(key);
+		}
+	}
+
+	async function deleteTask() {
+		await _delete(id);
+	}
 </script>
 
 <section class="card container">
@@ -23,30 +38,43 @@
 		<Loading size={24} />
 		<p class="task">{task}</p>
 	{:else}
-		<!-- else content here -->
-		<span>
-			<Checkbox id={task.id} completed={task.completed} />
-		</span>
-		<div class="info">
-			<p class="task">{task.task}</p>
-			<div class="extra">
-				{#if task.due}
-					<p class:passed={isPassed(task.due)} class="d-r">
-						{#if !isPassed(task.due)}
-							<span>Due by </span> {localizeDate(task.due)}
-						{:else}
-							<span>Passed </span> {localizeDate(task.due)}
-						{/if}
-					</p>
-				{/if}
-				{#if task.repeat}
-					<p class="d-r"><span>Repeat </span> {getRF(task.repeat_frequency)}</p>
+		<div class="content">
+			<span>
+				<Checkbox
+					id={task.id}
+					completed={task.completed}
+					on:change={() => complete(id, task.completed)}
+				/>
+			</span>
+			<div class="info">
+				<p class="task">{task.task}</p>
+				<div class="extra">
+					{#if task.due}
+						<p class:passed={isPassed(task.due)} class="d-r">
+							{#if !isPassed(task.due)}
+								<span>Due by </span> {localizeDate(task.due)}
+							{:else}
+								<span>Passed </span> {localizeDate(task.due)}
+							{/if}
+						</p>
+					{/if}
+					{#if task.repeat}
+						<p class="d-r"><span>Repeat </span> {getRF(task.repeat_frequency)}</p>
+					{/if}
+				</div>
+				{#if task.description}
+					<p class="desc">{task.description}</p>
 				{/if}
 			</div>
-			{#if task.description}
-				<p class="desc">{task.description}</p>
-			{/if}
 		</div>
+		<IconButton
+			icon={mdiTrashCanOutline}
+			animate
+			hover
+			pure
+			icolor="var(--danger-clr)"
+			on:click={deleteTask}
+		/>
 	{/if}
 </section>
 
@@ -56,6 +84,13 @@
 		align-items: center;
 		gap: 16px;
 		padding: 16px;
+		justify-content: space-between;
+	}
+
+	.content {
+		display: flex;
+		align-items: center;
+		gap: 16px;
 	}
 
 	.extra {

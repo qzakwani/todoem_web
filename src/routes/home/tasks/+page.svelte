@@ -20,19 +20,21 @@
 	browser && setUp();
 </script>
 
-{#if $tasks === null}
-	<p class="error">{msg}</p>
-{:else if isEmpty($tasks)}
-	<h1>No tasks</h1>
-{:else}
-	<div class="tasks">
-		{#each Object.entries($tasks) as [key, task], i}
-			<div in:fly={{ duration: 300, y: 500, opacity: 0.5 }}>
-				<Task {task} />
-			</div>
-		{/each}
-	</div>
-{/if}
+<div class="tasks">
+	{#if $tasks === null}
+		<p class="error">{msg}</p>
+	{:else if isEmpty($tasks)}
+		<h1>No tasks</h1>
+	{:else}
+		<div class="tasks-container">
+			{#each Object.entries($tasks) as [key, task] (key)}
+				<div in:fly={{ duration: 300, y: 500, opacity: 0.5 }}>
+					<Task {task} id={key} />
+				</div>
+			{/each}
+		</div>
+	{/if}
+</div>
 <AddTask />
 
 <style>
@@ -40,6 +42,10 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+		min-height: calc(100% - 3rem);
+	}
+
+	.tasks-container {
 		margin-bottom: 220px;
 	}
 </style>
