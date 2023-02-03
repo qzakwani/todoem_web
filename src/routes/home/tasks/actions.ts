@@ -23,6 +23,17 @@ export async function _getTasks<Type>(data?: Type, attempts = 0): Promise<APIRes
 	}
 }
 
+// async function repeatTasks(){
+// 	tasks.update((t) => {
+// 		if (t) {
+// 			Object.entries(t).forEach(([key, task]) => {
+// 				if (typeof task !== 'string' && task.completed) delete t[key];
+// 			});
+// 		}
+// 		return t;
+// 	});
+// }
+
 export async function _addTask<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
 	const tempIndex = ruid();
 	const _data = data as FormData;
@@ -134,9 +145,28 @@ export async function _deleteAll<Type>(data?: Type, attempts = 0): Promise<APIRe
 	tasks.set({});
 	const res = await authAction('task/delete-all/', 'DELETE');
 	if (res && res.status < 300) {
-		return { ok: true };
+		return { ok: true, data: await res.json() };
 	} else {
 		tasks.set(ta);
 		return await handelUnsuccessfulResponse(res, _deleteAll, attempts, data);
+	}
+}
+
+export async function _deleteAllCompleted<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const ta = get(tasks);
+	tasks.update((t) => {
+		if (t) {
+			Object.entries(t).forEach(([key, task]) => {
+				if (typeof task !== 'string' && task.completed) delete t[key];
+			});
+		}
+		return t;
+	});
+	const res = await authAction('task/delete-all-completed/', 'DELETE');
+	if (res && res.status < 300) {
+		return { ok: true, data: await res.json() };
+	} else {
+		tasks.set(ta);
+		return await handelUnsuccessfulResponse(res, _deleteAllCompleted, attempts, data);
 	}
 }

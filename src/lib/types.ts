@@ -2,7 +2,8 @@ import type * as Model from './models';
 
 export interface APIResponse {
 	ok: boolean;
-	data?: AuthError | APIError | FieldError[] | Record<string, string | number>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	data?: AuthError | APIError | FieldError[] | Record<string, string | number> | any;
 }
 
 export interface APIError {

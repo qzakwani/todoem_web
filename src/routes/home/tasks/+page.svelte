@@ -9,10 +9,9 @@
 	import Task from './Task.svelte';
 	import { quintOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
-	import { SettingButton, Overlay } from '$lib/components';
-	import { mdiDeleteEmpty, mdiDeleteRestore } from '@mdi/js';
-	let msg: string | undefined = 'fetching...';
-
+	import { Loading } from '$lib/components';
+	import Settings from './Settings.svelte';
+	let msg: string | undefined | 'fetching' = 'fetching';
 	async function setUp() {
 		const res = await actions._getTasks();
 		if (!res.ok && res.data) {
@@ -39,32 +38,30 @@
 		}
 	});
 
-	async function deleteAll() {
-		await actions._deleteAll();
-	}
-
 	browser && setUp();
 </script>
 
-<Overlay />
-<div class="settings">
-	<SettingButton danger icon={mdiDeleteRestore}>Delete Completed</SettingButton>
-	<SettingButton on:click={deleteAll} danger icon={mdiDeleteEmpty}>Delete All</SettingButton>
-</div>
+<Settings />
 <div class="tasks">
 	{#if $tasks === null}
-		<p class="error">{msg}</p>
+		{#if msg === 'fetching'}
+			<div class="loading">
+				<Loading size={80} />
+			</div>
+		{:else}
+			<p class="error">{msg}</p>
+		{/if}
 	{:else if isEmpty($tasks)}
-		<div class="layout">
-			<h1 class="uncompleted">No tasks</h1>
-			<h1 class="completed">No task</h1>
-		</div>
+		<h4 style="color: gray; font-style: italic;">Add tasks by clicking the add button below.</h4>
 	{:else}
 		<div class="layout">
-			<div class="tasks-container">
+			<div class="tasks-container uncompleted">
 				{#each Object.entries($tasks) as [key, task] (key)}
 					{#if typeof task === 'string' || !task.completed}
-						<div in:fly|local={{ duration: 300, y: 500, opacity: 0.5 }} out:send={{ key: key }}>
+						<div
+							in:fly|local={{ duration: 300, y: 500, opacity: 0.5 }}
+							out:send|local={{ key: key }}
+						>
 							<Task {task} id={key} />
 						</div>
 					{/if}
@@ -74,7 +71,7 @@
 			<div class="completed tasks-container">
 				{#each Object.entries($tasks) as [key, task] (key)}
 					{#if typeof task !== 'string' && task.completed}
-						<div in:receive={{ key: key }} out:send={{ key: key }}>
+						<div in:receive|local={{ key: key }} out:send|local={{ key: key }}>
 							<Task {task} id={key} />
 						</div>
 					{/if}
@@ -86,37 +83,29 @@
 <AddTask />
 
 <style>
-	.settings {
-		position: absolute;
-		background-color: var(--bg-clr-sec);
-		width: calc(100% - 16px);
-		top: 0;
-		left: 0;
-		border-bottom-left-radius: 32px;
-		border-bottom-right-radius: 32px;
-		padding: 8px;
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-	}
-
 	.layout {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 2fr 1fr;
 		grid-template-rows: auto;
 		grid-auto-flow: dense;
 		gap: 16px;
 	}
 
-	/* .uncompleted {
-		grid-column: 1/2;
-	} */
+	.completed {
+		/* padding: 8px;
+		-webkit-box-shadow: inset 10px 10px 10px 1px rgba(0, 0, 0, 0.27);
+		box-shadow: inset 10px 10px 10px 1px rgba(0, 0, 0, 0.27);
+		height: 100%; */
+
+		border-left: 5px solid var(--divider-clr);
+		padding-left: 8px;
+	}
 
 	.tasks {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-		min-height: calc(100% - 3rem);
+		min-height: calc(100% - 112px);
 		margin-top: 42px;
 	}
 
@@ -125,5 +114,34 @@
 		flex-direction: column;
 		gap: 10px;
 		margin-bottom: 220px;
+	}
+
+	.loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	h4 {
+		position: absolute;
+		left: 16px;
+		top: 64px;
+	}
+
+	@media only screen and (max-width: 850px) {
+		.layout {
+			grid-template-columns: 1fr;
+		}
+
+		.uncompleted {
+			margin-bottom: 32px;
+		}
+
+		.completed {
+			border-left: none;
+			padding-left: 0;
+			padding-top: 8px;
+			border-top: 5px solid var(--divider-clr);
+		}
 	}
 </style>

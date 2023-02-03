@@ -1,46 +1,41 @@
 <script lang="ts">
 	import Button from './Button.svelte';
-	import { browser } from '$app/environment';
-	export let active = true;
+	import { onDestroy, onMount } from 'svelte';
 	export let title = '';
 	export let prompt = '';
 	export let ok = '';
 	export let okAction: ((e: MouseEvent) => void) | null = null;
 	export let no = '';
-	export let noAction: (e: MouseEvent) => void = deactivate;
-	function deactivate(e: Event) {
-		e.stopPropagation();
-		active = false;
-	}
+	export let noAction: (e: MouseEvent) => void;
 
-	$: if (active && browser) {
-		window.addEventListener('click', deactivate);
-	} else if (browser) {
-		window.removeEventListener('click', deactivate);
-	}
+	onMount(() => {
+		window.addEventListener('click', noAction);
+	});
+
+	onDestroy(() => {
+		window.removeEventListener('click', noAction);
+	});
 </script>
 
-{#if active}
-	<div class="overlay">
-		<div class="container">
-			{#if title}
-				<h2>{title}</h2>
-			{/if}
+<div class="overlay">
+	<div class="container">
+		{#if title}
+			<h2>{title}</h2>
+		{/if}
 
-			{#if prompt}
-				<p>{prompt}</p>
+		{#if prompt}
+			<p>{prompt}</p>
+		{/if}
+		<div class="actions">
+			{#if no}
+				<Button danger on:click={noAction}>{no}</Button>
 			{/if}
-			<div class="actions">
-				{#if ok}
-					<Button on:click={okAction}>{ok}</Button>
-				{/if}
-				{#if no}
-					<Button on:click={noAction}>{no}</Button>
-				{/if}
-			</div>
+			{#if ok}
+				<Button on:click={okAction}>{ok}</Button>
+			{/if}
 		</div>
 	</div>
-{/if}
+</div>
 
 <style>
 	.overlay {
@@ -60,5 +55,16 @@
 		padding: 20px;
 		background-color: var(--bg-clr-sec);
 		border-radius: 16px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 16px;
+	}
+
+	.actions {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
 	}
 </style>

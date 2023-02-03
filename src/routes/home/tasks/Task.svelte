@@ -35,8 +35,11 @@
 
 <section class="card container">
 	{#if typeof task === 'string'}
-		<Loading size={24} />
-		<p class="task">{task}</p>
+		<div class="content">
+			<Loading size={24} />
+			<p class="task">{task}</p>
+		</div>
+		<IconButton hover pure icon={mdiTrashCanOutline} icolor="var(--danger-clr)" />
 	{:else}
 		<div class="content">
 			<span>

@@ -9,12 +9,13 @@
 	let msg: string | undefined;
 	let form: HTMLFormElement;
 	let active = false;
-	let repeat = false;
+	// let repeat = false;
 	let due = false;
 	let desc = false;
-	async function submit() {
+	async function submit(e: Event) {
+		e.preventDefault();
 		const data = new FormData(form);
-		repeat = due = desc = false;
+		due = desc = false;
 		form.reset();
 		const res = await _addTask(data);
 	}
@@ -34,6 +35,7 @@
 	<div class="form">
 		{#if active}
 			<form
+				method="post"
 				on:submit={submit}
 				transition:scale={{ duration: 500, easing: quintOut }}
 				bind:this={form}
@@ -48,7 +50,7 @@
 				<input type="text" name="task" required placeholder="New Task*" autofocus class="custom" />
 
 				<div class="opts">
-					<IconButton
+					<!-- <IconButton
 						on:click={() => {
 							repeat = !repeat;
 						}}
@@ -56,7 +58,7 @@
 						pure
 						animate
 						icolor={repeat ? 'var(--success-clr)' : 'gray'}
-					/>
+					/> -->
 					<Button
 						on:click={() => {
 							due = !due;
@@ -75,7 +77,7 @@
 					>
 				</div>
 
-				<input type="checkbox" name="repeat" bind:checked={repeat} hidden />
+				<!-- <input type="checkbox" name="repeat" bind:checked={repeat} hidden />
 				{#if repeat}
 					<div class="entry">
 						<span class="label">Repeat </span>
@@ -85,7 +87,7 @@
 							<option value="M">Monthly</option>
 						</select>
 					</div>
-				{/if}
+				{/if} -->
 				{#if due}
 					<div class="entry">
 						<span class="label">Due </span>

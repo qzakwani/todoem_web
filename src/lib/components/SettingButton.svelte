@@ -17,7 +17,7 @@
 		align-items: center;
 		justify-content: center;
 		background-color: transparent;
-		opacity: 0.7;
+		opacity: 0.5;
 		font-size: 16px;
 	}
 
