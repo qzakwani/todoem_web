@@ -5,3 +5,5 @@ export { default as IconButton } from './IconButton.svelte';
 export { default as Avatar } from './Avatar.svelte';
 export { default as Checkbox } from './Checkbox.svelte';
 export { default as Loading } from './Loading.svelte';
+export { default as SettingButton } from './SettingButton.svelte';
+export { default as Overlay } from './Overlay.svelte';

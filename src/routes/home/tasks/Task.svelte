@@ -47,7 +47,7 @@
 				/>
 			</span>
 			<div class="info">
-				<p class="task">{task.task}</p>
+				<p class={task.completed ? 'task completed' : 'task'}>{task.task}</p>
 				<div class="extra">
 					{#if task.due}
 						<p class:passed={isPassed(task.due)} class="d-r">
@@ -119,5 +119,10 @@
 
 	.passed span {
 		color: var(--danger-clr);
+	}
+
+	.completed {
+		text-decoration: line-through;
+		opacity: 0.4;
 	}
 </style>

@@ -9,7 +9,8 @@
 	import Task from './Task.svelte';
 	import { quintOut } from 'svelte/easing';
 	import { crossfade } from 'svelte/transition';
-
+	import { SettingButton, Overlay } from '$lib/components';
+	import { mdiDeleteEmpty, mdiDeleteRestore } from '@mdi/js';
 	let msg: string | undefined = 'fetching...';
 
 	async function setUp() {
@@ -38,9 +39,18 @@
 		}
 	});
 
+	async function deleteAll() {
+		await actions._deleteAll();
+	}
+
 	browser && setUp();
 </script>
 
+<Overlay />
+<div class="settings">
+	<SettingButton danger icon={mdiDeleteRestore}>Delete Completed</SettingButton>
+	<SettingButton on:click={deleteAll} danger icon={mdiDeleteEmpty}>Delete All</SettingButton>
+</div>
 <div class="tasks">
 	{#if $tasks === null}
 		<p class="error">{msg}</p>
@@ -51,7 +61,7 @@
 		</div>
 	{:else}
 		<div class="layout">
-			<div class="uncompleted tasks-container">
+			<div class="tasks-container">
 				{#each Object.entries($tasks) as [key, task] (key)}
 					{#if typeof task === 'string' || !task.completed}
 						<div in:fly|local={{ duration: 300, y: 500, opacity: 0.5 }} out:send={{ key: key }}>
@@ -76,6 +86,20 @@
 <AddTask />
 
 <style>
+	.settings {
+		position: absolute;
+		background-color: var(--bg-clr-sec);
+		width: calc(100% - 16px);
+		top: 0;
+		left: 0;
+		border-bottom-left-radius: 32px;
+		border-bottom-right-radius: 32px;
+		padding: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+	}
+
 	.layout {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -86,10 +110,6 @@
 
 	/* .uncompleted {
 		grid-column: 1/2;
-	}
-
-	.completed {
-		grid-column: 2/3;
 	} */
 
 	.tasks {
@@ -97,6 +117,7 @@
 		flex-direction: column;
 		gap: 10px;
 		min-height: calc(100% - 3rem);
+		margin-top: 42px;
 	}
 
 	.tasks-container {
