@@ -20,11 +20,11 @@
 		}
 	}
 
-	async function complete(key: string, isComplete: boolean) {
+	async function complete(isComplete: boolean) {
 		if (!isComplete) {
-			await _complete(key);
+			await _complete(id);
 		} else {
-			await _uncomplete(key);
+			await _uncomplete(id);
 		}
 	}
 
@@ -46,7 +46,7 @@
 				<Checkbox
 					id={task.id}
 					completed={task.completed}
-					on:change={() => complete(id, task.completed)}
+					on:change={() => complete(task.completed)}
 				/>
 			</span>
 			<div class="info">

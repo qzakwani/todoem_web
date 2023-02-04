@@ -65,7 +65,7 @@
 		background: none;
 		color: var(--primary-clr);
 		border: none;
-		text-transform: capitalize;
+		/* text-transform: capitalize; */
 	}
 
 	.secondary {

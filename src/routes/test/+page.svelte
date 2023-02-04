@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Checkbox, MenuButton, IconButton, Loading } from '$lib/components';
+	import { Button, Checkbox, MenuButton, IconButton, Loading, Snackbar } from '$lib/components';
 	import { mdiHome } from '@mdi/js';
 
 	let comp = false;
@@ -38,16 +38,20 @@
 		/>
 
 		<Loading />
+
+		<Snackbar active timeout={100000}>Done boy.</Snackbar>
 	</div>
 </main>
 
 <style>
 	.btns {
+		/* background-color: black; */
 		padding-top: 3rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
 		gap: 1rem;
+		height: 100vh;
 	}
 </style>

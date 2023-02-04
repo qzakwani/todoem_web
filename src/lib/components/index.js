@@ -7,3 +7,4 @@ export { default as Checkbox } from './Checkbox.svelte';
 export { default as Loading } from './Loading.svelte';
 export { default as SettingButton } from './SettingButton.svelte';
 export { default as Overlay } from './Overlay.svelte';
+export { default as Snackbar } from './Snackbar.svelte';

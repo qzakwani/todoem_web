@@ -100,7 +100,7 @@ export async function _uncomplete<Type>(data?: Type, attempts = 0): Promise<APIR
 		return n;
 	});
 
-	const res = await authAction('task/complete/' + tid + '/', 'POST');
+	const res = await authAction('task/uncomplete/' + tid + '/', 'POST');
 	if (res && res.status < 300) {
 		return { ok: true };
 	} else {

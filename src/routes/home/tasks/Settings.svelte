@@ -1,20 +1,32 @@
 <script lang="ts">
 	import { _deleteAll, _deleteAllCompleted } from './actions';
-	import { SettingButton, Overlay } from '$lib/components';
+	import { SettingButton, Overlay, Snackbar } from '$lib/components';
 	import { mdiDeleteEmpty, mdiDeleteRestore } from '@mdi/js';
 	let deleteAllOverlay = false;
 	let deleteCompletedOverlay = false;
 
+	let showSnackbar = false;
+	let msg: string;
 	async function deleteAll() {
 		const res = await _deleteAll();
-		// console.log(res.data.deleted_tasks);
+		if (res.ok) {
+			msg = 'Deleted ' + res.data.deleted_tasks + ' tasks.';
+			showSnackbar = true;
+		}
 	}
 
 	async function deleteAllCompleted() {
 		const res = await _deleteAllCompleted();
-		// console.log(res.data.deleted_tasks);
+		if (res.ok) {
+			msg = 'Deleted ' + res.data.deleted_tasks + ' completed tasks.';
+			showSnackbar = true;
+		}
 	}
+
+	$: console.log(showSnackbar);
 </script>
+
+<Snackbar left bind:active={showSnackbar}>{msg}</Snackbar>
 
 {#if deleteAllOverlay}
 	<Overlay

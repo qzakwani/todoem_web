@@ -17,6 +17,7 @@
 	--secondary-clr: #fca311;
 	--danger-clr: crimson;
 	--success-clr: #4caf50;
+	--warning-clr: #ffee58;
 
 	--btn-bg-danger: var(--danger-clr);
 	--btn-txt-clr-danger: white;
