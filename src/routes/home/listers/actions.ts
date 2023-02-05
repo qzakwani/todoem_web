@@ -2,7 +2,8 @@ import { authAction, handelUnsuccessfulResponse } from '$lib/actions';
 import type { APIResponse } from '$lib/types';
 
 export async function _findListers<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
-	const res = await authAction('lister/search/', 'POST', data as FormData);
+	const d = data as { search: FormData; page: number };
+	const res = await authAction('lister/search/?page=' + d.page.toString(), 'POST', d.search);
 	if (res && res.status < 300) {
 		return { ok: true, data: await res.json() };
 	} else {

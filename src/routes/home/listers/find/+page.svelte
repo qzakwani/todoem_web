@@ -9,30 +9,62 @@
 	let fetching = false;
 	let next = false;
 	let page = 1;
-	let manyPage = false;
+	let numPages = 1;
+	let pages: { [index: number]: Lister[] } = {};
 
-	async function getListers(e: Event) {
-		fetching = true;
-		e.preventDefault();
-		const data = new FormData(form);
-		const res = await _findListers(data);
-		if (res.ok) {
-			const resp = res.data as { next: boolean; result: Lister[] };
-			fetching = false;
-			results = resp.result;
-			manyPage = next = resp.next;
-		}
+	function reset() {
+		page = 1;
+		pages = {};
 	}
 
-	async function changePage() {
+	async function getListers(e?: Event) {
+		e?.preventDefault();
+		fetching = true;
+		if (Object.prototype.hasOwnProperty.call(pages, page)) {
+			results = pages[page];
+			console.log('from cache');
+		} else {
+			const data = { search: new FormData(form), page };
+			const res = await _findListers(data);
+			if (res.ok) {
+				const resp = res.data as { next: boolean; result: Lister[] };
+				results = resp.result;
+				pages[page] = results;
+				next = resp.next;
+				if (next) {
+					numPages++;
+				}
+			}
+		}
+		fetching = false;
+	}
+
+	async function nexPage() {
 		page++;
-		console.log(page);
+		await getListers();
+	}
+
+	async function previousPage() {
+		page--;
+		await getListers();
 	}
 </script>
 
-<form on:submit={getListers} bind:this={form}>
+<form
+	on:submit={(e) => {
+		reset();
+		getListers(e);
+	}}
+	bind:this={form}
+>
 	<input type="text" name="search" placeholder="search lister" required />
-	<IconButton type="submit" icon={mdiMagnify} disabled={fetching} size={30} />
+	{#if fetching}
+		<div class="loading" style="padding: 5px;">
+			<Loading size={30} />
+		</div>
+	{:else}
+		<IconButton type="submit" icon={mdiMagnify} size={30} />
+	{/if}
 </form>
 
 {#if results}
@@ -41,18 +73,14 @@
 			<SearchCard {lister} />
 		{/each}
 	</div>
-{/if}
 
-{#if fetching}
-	<div class="loading">
-		<Loading size={100} />
-	</div>
-{/if}
-
-{#if manyPage}
 	<div class="nav-page">
-		<IconButton icon={mdiChevronLeft} disabled={page === 1} />
-		<IconButton icon={mdiChevronRight} disabled={!next} on:click={changePage} />
+		<IconButton icon={mdiChevronLeft} disabled={page === 1} on:click={previousPage} />
+		<IconButton
+			icon={mdiChevronRight}
+			disabled={!next || (!next && page < numPages)}
+			on:click={nexPage}
+		/>
 	</div>
 {/if}
 
