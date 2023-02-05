@@ -84,3 +84,8 @@ export interface TaskGroupTask extends Model {
 	last_modified: string | null;
 	created_at: string;
 }
+
+export interface Lister extends Model {
+	username: string;
+	name: string;
+}

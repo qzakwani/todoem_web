@@ -9,6 +9,7 @@
 	export let outlined = false;
 	export let pure = false;
 	export let hover = false;
+	export let disabled = false;
 	export let type: 'button' | 'submit' | 'reset' = 'button';
 	let style: string = 'background-color: ' + color;
 	if (outlined) {
@@ -18,7 +19,7 @@
 	}
 </script>
 
-<button {type} on:click {style} class:animate class:float class:hover>
+<button {type} on:click {style} class:animate class:float class:hover {disabled}>
 	<Icon path={icon} color={icolor} {size} />
 </button>
 
@@ -33,6 +34,12 @@
 
 	button:hover {
 		filter: brightness(1.3);
+	}
+
+	button:disabled {
+		opacity: 0.5;
+		cursor: default;
+		filter: none;
 	}
 
 	.float {
