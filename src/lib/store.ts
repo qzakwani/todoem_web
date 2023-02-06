@@ -1,11 +1,13 @@
 import { writable } from 'svelte/store';
-import type { User } from './models';
+import type { User, Lister } from './models';
 import type { Credentials } from './types';
 import { browser } from '$app/environment';
 
 export const user = writable<User | null>(getUser());
 export const isLoggedIn = writable(_isLoggedIn());
 export const credentials = writable<Credentials | null>(getCredentials());
+export const searchPages = writable<{ [index: number]: Lister[] }>({});
+export const currentLister = writable<Lister>();
 
 function getCredentials() {
 	if (browser) {

@@ -52,7 +52,9 @@
 			<p class="error">{msg}</p>
 		{/if}
 	{:else if isEmpty($tasks)}
-		<h4 style="color: gray; font-style: italic;">Add tasks by clicking the add button below.</h4>
+		<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
+			Add tasks by clicking the add button below.
+		</h4>
 	{:else}
 		<div class="layout">
 			<div class="tasks-container uncompleted">

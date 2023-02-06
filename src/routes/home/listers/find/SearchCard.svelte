@@ -1,9 +1,16 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import type { Lister } from '$lib/models';
+	import { currentLister } from '$lib/store';
 	export let lister: Lister;
+
+	function navigateToLister() {
+		$currentLister = lister;
+		goto('/home/listers/lister/' + lister.id.toString());
+	}
 </script>
 
-<div class="lister card">
+<div class="lister card" on:click={navigateToLister} on:keypress>
 	{#if lister.name}
 		<p class="primary">{lister.name}</p>
 		<p class="secondary">@{lister.username}</p>

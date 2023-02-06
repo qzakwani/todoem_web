@@ -11,7 +11,8 @@
 		mdiFormatListBulleted,
 		mdiCheckCircleOutline,
 		mdiFormatListGroup,
-		mdiThemeLightDark
+		mdiThemeLightDark,
+		mdiAccountGroupOutline
 	} from '@mdi/js';
 
 	const Paths = {
@@ -19,7 +20,8 @@
 		tasks: '/home/tasks',
 		tasklist: '/home/tasklist',
 		taskgroup: '/home/taskgroup',
-		account: '/home/account'
+		account: '/home/account',
+		listers: '/home/listers'
 	};
 
 	function changeTheme() {
@@ -79,6 +81,12 @@
 				icolor="#e07a5f"
 				on:click={() => goto(Paths.taskgroup)}
 				selected={$page.route.id === Paths.taskgroup}>Taskgroup</MenuButton
+			>
+			<MenuButton
+				icon={mdiAccountGroupOutline}
+				icolor="#8338ec"
+				on:click={() => goto(Paths.listers)}
+				selected={$page.route.id?.startsWith(Paths.listers)}>Listers</MenuButton
 			>
 		</aside>
 		<article>

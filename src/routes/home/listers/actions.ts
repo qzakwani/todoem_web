@@ -22,3 +22,21 @@ export async function _sendConnectionRequest<Type>(
 		return await handelUnsuccessfulResponse(res, _sendConnectionRequest, attempts, data);
 	}
 }
+
+export async function _getConnStatus<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/connection-status/' + data + '/', 'GET');
+	if (res && res.status < 300) {
+		return { ok: true, data: await res.json() };
+	} else {
+		return await handelUnsuccessfulResponse(res, _getConnStatus, attempts, data);
+	}
+}
+
+export async function _getLister<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/' + data + '/', 'GET');
+	if (res && res.status < 300) {
+		return { ok: true, data: await res.json() };
+	} else {
+		return await handelUnsuccessfulResponse(res, _getLister, attempts, data);
+	}
+}

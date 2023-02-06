@@ -3,35 +3,32 @@
 	import { IconButton, Loading } from '$lib/components';
 	import { _findListers } from '../actions';
 	import SearchCard from './SearchCard.svelte';
+	import { searchPages } from '$lib/store';
 	import { mdiMagnify, mdiChevronRight, mdiChevronLeft } from '@mdi/js';
 	let form: HTMLFormElement;
-	let results: Lister[];
-	let fetching = false;
-	let next = false;
 	let page = 1;
-	let numPages = 1;
-	let pages: { [index: number]: Lister[] } = {};
+	let results: Lister[] = $searchPages[page] || [];
+	let fetching = false;
+	let numPages = Object.keys($searchPages).length || 1;
 
 	function reset() {
-		page = 1;
-		pages = {};
+		page = numPages = 1;
+		$searchPages = {};
 	}
 
 	async function getListers(e?: Event) {
 		e?.preventDefault();
 		fetching = true;
-		if (Object.prototype.hasOwnProperty.call(pages, page)) {
-			results = pages[page];
-			console.log('from cache');
+		if (Object.prototype.hasOwnProperty.call($searchPages, page)) {
+			results = $searchPages[page];
 		} else {
 			const data = { search: new FormData(form), page };
 			const res = await _findListers(data);
 			if (res.ok) {
 				const resp = res.data as { next: boolean; result: Lister[] };
 				results = resp.result;
-				pages[page] = results;
-				next = resp.next;
-				if (next) {
+				$searchPages[page] = results;
+				if (resp.next) {
 					numPages++;
 				}
 			}
@@ -69,18 +66,20 @@
 
 {#if results}
 	<div class="results">
-		{#each results as lister}
-			<SearchCard {lister} />
-		{/each}
+		{#if results.length === 0}
+			<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
+				No listers found.
+			</h4>
+		{:else}
+			{#each results as lister}
+				<SearchCard {lister} />
+			{/each}
+		{/if}
 	</div>
 
 	<div class="nav-page">
-		<IconButton icon={mdiChevronLeft} disabled={page === 1} on:click={previousPage} />
-		<IconButton
-			icon={mdiChevronRight}
-			disabled={!next || (!next && page < numPages)}
-			on:click={nexPage}
-		/>
+		<IconButton icon={mdiChevronLeft} disabled={page <= 1} on:click={previousPage} />
+		<IconButton icon={mdiChevronRight} disabled={page >= numPages} on:click={nexPage} />
 	</div>
 {/if}
 
