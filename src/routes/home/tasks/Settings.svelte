@@ -22,8 +22,6 @@
 			showSnackbar = true;
 		}
 	}
-
-	$: console.log(showSnackbar);
 </script>
 
 <Snackbar left bind:active={showSnackbar}>{msg}</Snackbar>

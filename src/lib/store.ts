@@ -9,6 +9,8 @@ export const credentials = writable<Credentials | null>(getCredentials());
 export const searchPages = writable<{ [index: number]: Lister[] }>({});
 export const currentLister = writable<Lister>();
 
+export const topDelta = writable<number>();
+
 function getCredentials() {
 	if (browser) {
 		return {

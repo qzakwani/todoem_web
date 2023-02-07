@@ -4,8 +4,7 @@
 	import { _logout } from '$lib/actions';
 	import logo from '$lib/assets/logo.svg';
 	import { MenuButton, IconButton, Avatar } from '$lib/components/index';
-	import { isLoggedIn, theme } from '$lib/store';
-	import { browser } from '$app/environment';
+	import { isLoggedIn, theme, topDelta } from '$lib/store';
 	import {
 		mdiHome,
 		mdiFormatListBulleted,
@@ -14,6 +13,7 @@
 		mdiThemeLightDark,
 		mdiAccountGroupOutline
 	} from '@mdi/js';
+	import { onMount } from 'svelte';
 
 	const Paths = {
 		dashboard: '/home',
@@ -31,9 +31,15 @@
 		theme.set(_theme);
 	}
 
-	$: if (browser && !$isLoggedIn) {
+	$: if (!$isLoggedIn) {
 		goto('/login');
 	}
+	let container: HTMLElement;
+	onMount(() => {
+		container.addEventListener('scroll', () => {
+			topDelta.set(container.scrollTop);
+		});
+	});
 </script>
 
 <main>
@@ -89,7 +95,7 @@
 				selected={$page.route.id?.startsWith(Paths.listers)}>Listers</MenuButton
 			>
 		</aside>
-		<article>
+		<article bind:this={container}>
 			<slot />
 		</article>
 	</div>

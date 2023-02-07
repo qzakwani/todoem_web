@@ -89,3 +89,13 @@ export interface Lister extends Model {
 	username: string;
 	name: string;
 }
+
+export interface ConnectedLister extends Model {
+	lister: Lister;
+	date_connected: string;
+}
+
+export interface ConnectionRequest extends Model {
+	sender: Lister;
+	sent_at: string;
+}

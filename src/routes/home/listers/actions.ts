@@ -76,3 +76,12 @@ export async function _getMyListers<Type>(data?: Type, attempts = 0): Promise<AP
 		return await handelUnsuccessfulResponse(res, _getMyListers, attempts);
 	}
 }
+
+export async function _getMyConnReqs<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/connection-requests/?page=' + (data || '1'), 'GET');
+	if (res && res.status < 300) {
+		return { ok: true, data: await res.json() };
+	} else {
+		return await handelUnsuccessfulResponse(res, _getMyConnReqs, attempts);
+	}
+}
