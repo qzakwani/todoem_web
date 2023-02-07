@@ -23,7 +23,7 @@
 <Button on:click={requestConn}>
 	<div>
 		<Icon path={mdiAccountPlus} color="white" />
-		<p>Connect</p>
+		<p style="color: white">Connect</p>
 	</div>
 </Button>
 

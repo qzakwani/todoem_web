@@ -40,3 +40,39 @@ export async function _getLister<Type>(data?: Type, attempts = 0): Promise<APIRe
 		return await handelUnsuccessfulResponse(res, _getLister, attempts, data);
 	}
 }
+
+export async function _acceptConnRequest<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/connection-accept/' + data + '/', 'POST');
+	if (res && res.status < 300) {
+		return { ok: true };
+	} else {
+		return await handelUnsuccessfulResponse(res, _acceptConnRequest, attempts, data);
+	}
+}
+
+export async function _rejectConnRequest<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/connection-reject/' + data + '/', 'POST');
+	if (res && res.status < 300) {
+		return { ok: true };
+	} else {
+		return await handelUnsuccessfulResponse(res, _rejectConnRequest, attempts, data);
+	}
+}
+
+export async function _cancelConnRequest<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/connection-cancel/' + data + '/', 'POST');
+	if (res && res.status < 300) {
+		return { ok: true };
+	} else {
+		return await handelUnsuccessfulResponse(res, _cancelConnRequest, attempts, data);
+	}
+}
+
+export async function _getMyListers<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/my-listers/?page=' + (data || '1'), 'GET');
+	if (res && res.status < 300) {
+		return { ok: true, data: await res.json() };
+	} else {
+		return await handelUnsuccessfulResponse(res, _getMyListers, attempts);
+	}
+}

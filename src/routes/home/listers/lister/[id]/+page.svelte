@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import DisconnectedActions from './DisconnectedActions.svelte';
-
+	import ReceivedActions from './ReceivedActions.svelte';
+	import SentActions from './SentActions.svelte';
 	export let data: PageData;
 
 	let status = data.connStatus as string;
@@ -23,9 +24,19 @@
 			}}
 		/>
 	{:else if status === 'sent'}
-		<!--  -->
+		<SentActions
+			id={data.lister.id}
+			on:statusChange={() => {
+				status = 'disconnected';
+			}}
+		/>
 	{:else if status === 'received'}
-		<!--  -->
+		<ReceivedActions
+			id={data.lister.id}
+			on:statusChange={(e) => {
+				status = e.detail.newStatus;
+			}}
+		/>
 	{:else if status === 'private'}
 		<!--  -->
 	{:else}
