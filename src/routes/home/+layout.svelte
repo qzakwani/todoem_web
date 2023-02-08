@@ -4,7 +4,7 @@
 	import { _logout } from '$lib/actions';
 	import logo from '$lib/assets/logo.svg';
 	import { MenuButton, IconButton, Avatar } from '$lib/components/index';
-	import { isLoggedIn, theme, topDelta } from '$lib/store';
+	import { isLoggedIn, theme } from '$lib/store';
 	import {
 		mdiHome,
 		mdiFormatListBulleted,
@@ -34,12 +34,12 @@
 	$: if (!$isLoggedIn) {
 		goto('/login');
 	}
-	let container: HTMLElement;
-	onMount(() => {
-		container.addEventListener('scroll', () => {
-			topDelta.set(container.scrollTop);
-		});
-	});
+	// let container: HTMLElement;
+	// onMount(() => {
+	// 	container.addEventListener('scroll', () => {
+	// 		topDelta.set(container.scrollTop);
+	// 	});
+	// });
 </script>
 
 <main>
@@ -95,7 +95,7 @@
 				selected={$page.route.id?.startsWith(Paths.listers)}>Listers</MenuButton
 			>
 		</aside>
-		<article bind:this={container}>
+		<article>
 			<slot />
 		</article>
 	</div>

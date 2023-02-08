@@ -2,11 +2,13 @@
 	import Icon from './Icon.svelte';
 	export let icon: string;
 	export let danger = false;
+	export let hover = false;
+	export let color = 'gray';
 </script>
 
-<button on:click class="animate">
-	<Icon path={icon} color={danger ? 'var(--danger-clr)' : 'gray'} />
-	<p style={danger ? 'color: var(--danger-clr)' : 'color: gray'}>
+<button on:click class="animate" class:hover>
+	<Icon path={icon} color={danger ? 'var(--danger-clr)' : color} />
+	<p style={danger ? 'color: var(--danger-clr)' : 'color: ' + color}>
 		<slot />
 	</p>
 </button>
@@ -17,14 +19,22 @@
 		align-items: center;
 		justify-content: center;
 		background-color: transparent;
-		opacity: 0.5;
 		font-size: 16px;
+		gap: 5px;
 	}
 
-	button:hover {
+	.hover {
+		opacity: 0.5;
+	}
+
+	.hover:hover {
 		opacity: 1;
 	}
 
+	p {
+		font-weight: 500;
+		/* margin-left: 5px; */
+	}
 	.animate:focus {
 		animation: button-pop 300ms ease-out;
 	}

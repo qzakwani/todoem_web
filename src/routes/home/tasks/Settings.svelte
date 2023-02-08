@@ -61,6 +61,7 @@
 			deleteCompletedOverlay = true;
 		}}
 		danger
+		hover
 		icon={mdiDeleteRestore}>Delete Completed</SettingButton
 	>
 	<SettingButton
@@ -69,6 +70,7 @@
 			deleteAllOverlay = true;
 		}}
 		danger
+		hover
 		icon={mdiDeleteEmpty}>Delete All</SettingButton
 	>
 </div>
