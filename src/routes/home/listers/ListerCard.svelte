@@ -3,6 +3,7 @@
 	import { IconButton } from '$lib/components';
 	import { mdiSend, mdiCancel } from '@mdi/js';
 	import { goto } from '$app/navigation';
+	import { currentLister } from '$lib/store';
 
 	export let connLister: ConnectedLister;
 </script>
@@ -13,7 +14,8 @@
 			<p
 				class="primary"
 				on:click={() => {
-					goto('/home/listers/lister/' + connLister.lister.id.toString());
+					$currentLister = connLister.lister;
+					goto('/home/listers/lister/' + connLister.lister.username);
 				}}
 				on:keypress
 			>
@@ -24,7 +26,8 @@
 			<p
 				class="primary"
 				on:click={() => {
-					goto('/home/listers/lister/' + connLister.lister.id.toString());
+					$currentLister = connLister.lister;
+					goto('/home/listers/lister/' + connLister.lister.username);
 				}}
 				on:keypress
 			>

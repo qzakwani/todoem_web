@@ -6,7 +6,7 @@
 
 	function navigateToLister() {
 		$currentLister = lister;
-		goto('/home/listers/lister/' + lister.id.toString());
+		goto('/home/listers/lister/' + lister.username);
 	}
 </script>
 

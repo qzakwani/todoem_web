@@ -6,7 +6,12 @@ import { browser } from '$app/environment';
 export const user = writable<User | null>(getUser());
 export const isLoggedIn = writable(_isLoggedIn());
 export const credentials = writable<Credentials | null>(getCredentials());
-export const searchPages = writable<{ [index: number]: Lister[] }>({});
+export const searchPages = writable<{
+	results: Lister[] | null;
+	currentPage: number;
+	search: string;
+	next: boolean;
+}>({ results: null, currentPage: 1, search: '', next: false });
 export const currentLister = writable<Lister>();
 
 export const topDelta = writable<number>();

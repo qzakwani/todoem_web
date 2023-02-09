@@ -4,46 +4,31 @@
 	import { _findListers } from '../actions';
 	import SearchCard from './SearchCard.svelte';
 	import { searchPages } from '$lib/store';
-	import { mdiMagnify, mdiChevronRight, mdiChevronLeft } from '@mdi/js';
+	import { mdiMagnify, mdiChevronDown } from '@mdi/js';
 	let form: HTMLFormElement;
-	let page = 1;
-	let results: Lister[] = $searchPages[page] || [];
 	let fetching = false;
-	let numPages = Object.keys($searchPages).length || 1;
 
 	function reset() {
-		page = numPages = 1;
-		$searchPages = {};
+		$searchPages.results = null;
+		$searchPages.next = false;
+		$searchPages.currentPage = 1;
 	}
 
 	async function getListers(e?: Event) {
 		e?.preventDefault();
 		fetching = true;
-		if (Object.prototype.hasOwnProperty.call($searchPages, page)) {
-			results = $searchPages[page];
-		} else {
-			const data = { search: new FormData(form), page };
-			const res = await _findListers(data);
-			if (res.ok) {
-				const resp = res.data as { next: boolean; result: Lister[] };
-				results = resp.result;
-				$searchPages[page] = results;
-				if (resp.next) {
-					numPages++;
-				}
-			}
+		const data = { search: new FormData(form), page: $searchPages.currentPage };
+		const res = await _findListers(data);
+		if (res.ok) {
+			const resp = res.data as { next: boolean; result: Lister[] };
+			$searchPages.currentPage++;
+			$searchPages.results = $searchPages.results
+				? [...$searchPages.results, ...resp.result]
+				: resp.result;
+			$searchPages.next = resp.next;
 		}
+
 		fetching = false;
-	}
-
-	async function nexPage() {
-		page++;
-		await getListers();
-	}
-
-	async function previousPage() {
-		page--;
-		await getListers();
 	}
 </script>
 
@@ -54,7 +39,13 @@
 	}}
 	bind:this={form}
 >
-	<input type="text" name="search" placeholder="search lister" required />
+	<input
+		type="text"
+		name="search"
+		placeholder="search lister"
+		required
+		bind:value={$searchPages.search}
+	/>
 	{#if fetching}
 		<div class="loading" style="padding: 5px;">
 			<Loading size={30} />
@@ -64,22 +55,21 @@
 	{/if}
 </form>
 
-{#if results}
+{#if $searchPages.results}
 	<div class="results">
-		{#if results.length === 0}
+		{#if $searchPages.results.length === 0}
 			<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
 				No listers found.
 			</h4>
 		{:else}
-			{#each results as lister}
+			{#each $searchPages.results as lister}
 				<SearchCard {lister} />
 			{/each}
 		{/if}
 	</div>
 
 	<div class="nav-page">
-		<IconButton icon={mdiChevronLeft} disabled={page <= 1} on:click={previousPage} />
-		<IconButton icon={mdiChevronRight} disabled={page >= numPages} on:click={nexPage} />
+		<IconButton icon={mdiChevronDown} disabled={!$searchPages.next} on:click={getListers} />
 	</div>
 {/if}
 
@@ -111,8 +101,8 @@
 	.nav-page {
 		margin-top: 16px;
 		padding: 16px;
+		width: 100%;
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
+		justify-content: center;
 	}
 </style>

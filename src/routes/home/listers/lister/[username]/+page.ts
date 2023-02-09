@@ -4,9 +4,10 @@ import { get } from 'svelte/store';
 import { _getConnStatus, _getLister } from '../../actions';
 
 export const load = (async ({ params }) => {
-	const id = params.id;
-	if (get(currentLister)?.id.toString() === id) {
-		const res = await _getConnStatus(id);
+	const un = params.username;
+	const u = get(currentLister);
+	if (u.username === un) {
+		const res = await _getConnStatus(u.id);
 		if (res.ok) {
 			return {
 				lister: get(currentLister),
@@ -15,8 +16,8 @@ export const load = (async ({ params }) => {
 		}
 		return get(currentLister);
 	} else {
-		const res = await _getLister(id);
-		const resp = await _getConnStatus(id);
+		const res = await _getLister(un);
+		const resp = await _getConnStatus(un);
 
 		if (res.ok && resp.ok) {
 			return { lister: res.data, connStatus: resp.data.status };
