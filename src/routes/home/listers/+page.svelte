@@ -3,7 +3,7 @@
 	import { _getMyListers } from './actions';
 	import { myListers } from '$lib/dataStore';
 	import ListerCard from './ListerCard.svelte';
-	import { IconButton } from '$lib/components';
+	import { IconButton, Loading } from '$lib/components';
 	import { mdiChevronDown } from '@mdi/js';
 
 	let fetching = false;
@@ -25,20 +25,36 @@
 
 {#if $myListers.listers !== null && $myListers.listers.length !== 0}
 	<div class="listers">
-		{#each $myListers.listers as connLister}
-			<ListerCard {connLister} />
+		{#each $myListers.listers as connLister, i}
+			<ListerCard {connLister} {i} />
 		{/each}
 	</div>
+{:else}
+	<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
+		You don't have any listers connected.
+	</h4>
 {/if}
 
-{#if $myListers.next}
-	<IconButton icon={mdiChevronDown} icolor="white" on:click={getMyListers} />
-{/if}
+<div class="nav-page">
+	{#if fetching}
+		<Loading />
+	{:else if $myListers.next}
+		<IconButton icon={mdiChevronDown} on:click={getMyListers} />
+	{/if}
+</div>
 
 <style>
 	.listers {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
+	}
+
+	.nav-page {
+		margin-top: 16px;
+		padding: 16px;
+		width: 100%;
+		display: flex;
+		justify-content: center;
 	}
 </style>

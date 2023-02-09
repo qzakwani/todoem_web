@@ -85,3 +85,12 @@ export async function _getMyConnReqs<Type>(data?: Type, attempts = 0): Promise<A
 		return await handelUnsuccessfulResponse(res, _getMyConnReqs, attempts);
 	}
 }
+
+export async function _disconnectLister<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/disconnect/' + data + '/', 'POST');
+	if (res && res.status < 300) {
+		return { ok: true };
+	} else {
+		return await handelUnsuccessfulResponse(res, _disconnectLister, attempts, data);
+	}
+}

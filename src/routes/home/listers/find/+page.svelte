@@ -69,7 +69,9 @@
 	</div>
 
 	<div class="nav-page">
-		<IconButton icon={mdiChevronDown} disabled={!$searchPages.next} on:click={getListers} />
+		{#if $searchPages.next}
+			<IconButton icon={mdiChevronDown} on:click={getListers} />
+		{/if}
 	</div>
 {/if}
 

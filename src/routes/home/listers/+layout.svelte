@@ -1,12 +1,10 @@
 <script lang="ts">
-	import type { LayoutData } from './$types';
 	import { Icon } from '$lib/components';
 	import { mdiAccountMultipleCheck, mdiAccountMultiplePlus, mdiAccountSearch } from '@mdi/js';
 	import { goto } from '$app/navigation';
+	import { connectionRequests } from '$lib/dataStore';
 
-	export let data: LayoutData;
-
-	let reqsNoti = data.connReqs as number;
+	$: reqsNoti = $connectionRequests.connReqs?.length || 0;
 	let page: 0 | 1 | 2 = 0;
 </script>
 
@@ -35,7 +33,13 @@
 		<Icon path={mdiAccountMultiplePlus} />
 		<p>Requests</p>
 		{#if reqsNoti > 0 && reqsNoti < 10}
-			<small>{reqsNoti}</small>
+			<div class="noti">
+				<p>{reqsNoti}</p>
+			</div>
+		{:else if reqsNoti > 9}
+			<div class="noti">
+				<p>9+</p>
+			</div>
 		{/if}
 	</div>
 	<div
@@ -67,7 +71,7 @@
 		display: flex;
 		align-items: center;
 		background-color: var(--bg-clr-sec);
-		min-height: fit-content;
+		height: fit-content;
 	}
 
 	.btn {
@@ -101,5 +105,17 @@
 
 	.selected > p {
 		font-weight: 500;
+	}
+
+	.noti {
+		background-color: var(--secondary-clr);
+		padding: 1px 8px;
+		border-radius: 5px;
+	}
+
+	.noti > p {
+		color: black;
+		font-weight: 900;
+		font-size: 12px;
 	}
 </style>

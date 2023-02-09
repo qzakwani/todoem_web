@@ -12,9 +12,13 @@ export const myListers = writable<{
 	next: false,
 	currentPage: 1
 });
-export const connectionRequests = writable<{ connReqs: ConnectionRequest[] | null; next: boolean }>(
-	{
-		connReqs: null,
-		next: false
-	}
-);
+
+export const connectionRequests = writable<{
+	connReqs: ConnectionRequest[] | null;
+	next: boolean;
+	currentPage: number;
+}>({
+	connReqs: null,
+	next: false,
+	currentPage: 1
+});
