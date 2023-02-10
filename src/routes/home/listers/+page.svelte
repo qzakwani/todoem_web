@@ -5,6 +5,7 @@
 	import ListerCard from './ListerCard.svelte';
 	import { IconButton, Loading } from '$lib/components';
 	import { mdiChevronDown } from '@mdi/js';
+	import { isEmpty } from '$lib/utils';
 
 	let fetching = false;
 
@@ -14,24 +15,30 @@
 		if (res.ok) {
 			const resp = res.data as { next: boolean; listers: ConnectedLister[] };
 			$myListers.currentPage++;
-			$myListers.listers = $myListers.listers
-				? [...$myListers.listers, ...resp.listers]
-				: [...resp.listers];
+			const temp: Record<number, ConnectedLister> = {};
+			resp.listers.forEach((v) => {
+				temp[v.lister.id] = v;
+			});
+			$myListers.listers = $myListers.listers ? { ...$myListers.listers, ...temp } : temp;
 			$myListers.next = resp.next;
 		}
 		fetching = false;
 	}
 </script>
 
-{#if $myListers.listers !== null && $myListers.listers.length !== 0}
+{#if $myListers.listers !== null && !isEmpty($myListers.listers)}
 	<div class="listers">
-		{#each $myListers.listers as connLister, i}
-			<ListerCard {connLister} {i} />
+		{#each Object.entries($myListers.listers) as [id, connLister] (id)}
+			<ListerCard {connLister} />
 		{/each}
 	</div>
-{:else}
+{:else if $myListers.listers && isEmpty($myListers.listers)}
 	<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
 		You don't have any listers connected.
+	</h4>
+{:else}
+	<h4 style="color: var(--danger-clr); font-style: italic; text-align:center; width: 100%">
+		Something went wrong. Please RELOAD!
 	</h4>
 {/if}
 

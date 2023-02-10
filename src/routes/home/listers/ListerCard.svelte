@@ -9,7 +9,6 @@
 	import { myListers } from '$lib/dataStore';
 
 	export let connLister: ConnectedLister;
-	export let i: number;
 
 	let showDisconnectPrompt = false;
 	let disconnected = false;
@@ -30,8 +29,8 @@
 	}
 
 	onDestroy(() => {
-		if (disconnected) {
-			$myListers.listers?.splice(i, 1);
+		if (disconnected && $myListers.listers) {
+			delete $myListers.listers[connLister.lister.id];
 		}
 	});
 </script>

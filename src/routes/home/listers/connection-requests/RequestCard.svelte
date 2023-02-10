@@ -7,7 +7,6 @@
 	import { connectionRequests, myListers } from '$lib/dataStore';
 
 	export let req: ConnectionRequest;
-	export let i: number;
 	let processing = false;
 
 	async function acceptLister() {
@@ -15,15 +14,18 @@
 		const res = await _acceptConnRequest(req.sender.id.toString());
 		if (res.ok) {
 			connectionRequests.update((n) => {
-				n.connReqs?.splice(i, 1);
+				if (n.connReqs) {
+					delete n.connReqs[req.sender.id];
+				}
 				return n;
 			});
 			myListers.update((l) => {
 				if (l.listers) {
-					l.listers.unshift({ id: 1, lister: req.sender, date_connected: '' });
+					l.listers[req.sender.id] = { id: 1, lister: req.sender, date_connected: '' };
 					return l;
 				} else {
-					l.listers = [{ id: 1, lister: req.sender, date_connected: '' }];
+					l.listers = {};
+					l.listers[req.sender.id] = { id: 1, lister: req.sender, date_connected: '' };
 					return l;
 				}
 			});
@@ -37,7 +39,9 @@
 		const res = await _rejectConnRequest(req.sender.id.toString());
 		if (res.ok) {
 			connectionRequests.update((n) => {
-				n.connReqs?.splice(i, 1);
+				if (n.connReqs) {
+					delete n.connReqs[req.sender.id];
+				}
 				return n;
 			});
 		} else {

@@ -3,17 +3,16 @@
 	import { mdiAccountMultipleCheck, mdiAccountMultiplePlus, mdiAccountSearch } from '@mdi/js';
 	import { goto } from '$app/navigation';
 	import { connectionRequests } from '$lib/dataStore';
+	import { page } from '$app/stores';
 
-	$: reqsNoti = $connectionRequests.connReqs?.length || 0;
-	let page: 0 | 1 | 2 = 0;
+	$: reqsNoti = $connectionRequests.connReqs ? Object.keys($connectionRequests.connReqs).length : 0;
 </script>
 
 <div class="container">
 	<div
 		class="btn"
-		class:selected={page === 0}
+		class:selected={$page.route.id === '/home/listers'}
 		on:click={() => {
-			page = 0;
 			goto('/home/listers');
 		}}
 		on:keypress
@@ -23,9 +22,8 @@
 	</div>
 	<div
 		class="btn"
-		class:selected={page === 1}
+		class:selected={$page.route.id === '/home/listers/connection-requests'}
 		on:click={() => {
-			page = 1;
 			goto('/home/listers/connection-requests');
 		}}
 		on:keypress
@@ -44,9 +42,8 @@
 	</div>
 	<div
 		class="btn"
-		class:selected={page === 2}
+		class:selected={$page.route.id === '/home/listers/find'}
 		on:click={() => {
-			page = 2;
 			goto('/home/listers/find');
 		}}
 		on:keypress

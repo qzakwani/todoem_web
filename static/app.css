@@ -28,8 +28,8 @@
 :root[theme='light'] {
 	--txt-clr: black;
 	--bg-clr: white;
-	--bg-clr-sec: #fafafa;
-	--divider-clr: #eeeeee;
+	--bg-clr-sec: #edebeb;
+	--divider-clr: #bdbdbd;
 	--header-clr: var(--primary-clr);
 
 	--btn-bg: var(--primary-clr);

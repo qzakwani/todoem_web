@@ -4,8 +4,10 @@
 	import { IconButton, Loading } from '$lib/components';
 	import type { ConnectionRequest } from '$lib/models';
 	import RequestCard from './RequestCard.svelte';
-
+	import { isEmpty } from '$lib/utils';
 	import { mdiChevronDown } from '@mdi/js';
+	import { scale } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 
 	let fetching = false;
 
@@ -15,24 +17,34 @@
 		if (res.ok) {
 			const resp = res.data as { next: boolean; requests: ConnectionRequest[] };
 			$connectionRequests.currentPage++;
+			const temp: Record<number, ConnectionRequest> = {};
+			resp.requests.forEach((v) => {
+				temp[v.sender.id] = v;
+			});
 			$connectionRequests.connReqs = $connectionRequests.connReqs
-				? [...$connectionRequests.connReqs, ...resp.requests]
-				: [...resp.requests];
+				? { ...$connectionRequests.connReqs, ...temp }
+				: temp;
 			$connectionRequests.next = resp.next;
 		}
 		fetching = false;
 	}
 </script>
 
-{#if $connectionRequests.connReqs !== null && $connectionRequests.connReqs.length !== 0}
+{#if $connectionRequests.connReqs !== null && !isEmpty($connectionRequests.connReqs)}
 	<div class="requests">
-		{#each $connectionRequests.connReqs as req, i}
-			<RequestCard {req} {i} />
+		{#each Object.entries($connectionRequests.connReqs) as [id, req] (id)}
+			<div out:scale|local={{ duration: 500, easing: quintOut }}>
+				<RequestCard {req} />
+			</div>
 		{/each}
 	</div>
-{:else}
+{:else if $connectionRequests.connReqs && isEmpty($connectionRequests.connReqs)}
 	<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
 		You don't have any connection requests.
+	</h4>
+{:else}
+	<h4 style="color: var(--danger-clr); font-style: italic; text-align:center; width: 100%">
+		Something went wrong. Please RELOAD!
 	</h4>
 {/if}
 
@@ -40,7 +52,7 @@
 	{#if fetching}
 		<Loading />
 	{:else if $connectionRequests.next}
-		<IconButton icon={mdiChevronDown} on:click />
+		<IconButton icon={mdiChevronDown} on:click={getRequests} />
 	{/if}
 </div>
 

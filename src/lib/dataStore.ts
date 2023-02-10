@@ -4,7 +4,7 @@ import type { Task, ConnectedLister, ConnectionRequest } from './models';
 export const tasks = writable<Record<string, Task | string> | null>(null);
 
 export const myListers = writable<{
-	listers: ConnectedLister[] | null;
+	listers: Record<number, ConnectedLister> | null;
 	next: boolean;
 	currentPage: number;
 }>({
@@ -14,7 +14,7 @@ export const myListers = writable<{
 });
 
 export const connectionRequests = writable<{
-	connReqs: ConnectionRequest[] | null;
+	connReqs: Record<number, ConnectionRequest> | null;
 	next: boolean;
 	currentPage: number;
 }>({

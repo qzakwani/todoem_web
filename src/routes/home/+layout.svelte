@@ -13,7 +13,6 @@
 		mdiThemeLightDark,
 		mdiAccountGroupOutline
 	} from '@mdi/js';
-	import { onMount } from 'svelte';
 
 	const Paths = {
 		dashboard: '/home',
