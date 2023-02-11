@@ -55,7 +55,7 @@
 			<p
 				class="primary"
 				on:click={() => {
-					$currentLister = connLister.lister;
+					$currentLister = { lister: connLister.lister, status: 'connected' };
 					goto('/home/listers/lister/' + connLister.lister.username);
 				}}
 				on:keypress
@@ -67,7 +67,7 @@
 			<p
 				class="primary"
 				on:click={() => {
-					$currentLister = connLister.lister;
+					$currentLister = { lister: connLister.lister, status: 'connected' };
 					goto('/home/listers/lister/' + connLister.lister.username);
 				}}
 				on:keypress
@@ -79,7 +79,7 @@
 	<div class="actions">
 		{#if disconnected}
 			{#if sent}
-				<div class="icon">
+				<div style="padding: 5px;">
 					<Icon path={mdiAccountArrowRight} color="var(--success-clr)" />
 				</div>
 			{:else}
@@ -138,9 +138,5 @@
 		display: flex;
 		align-items: center;
 		gap: 16px;
-	}
-
-	.icon {
-		padding: 5px;
 	}
 </style>

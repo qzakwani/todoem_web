@@ -33,11 +33,20 @@ export async function _getConnStatus<Type>(data?: Type, attempts = 0): Promise<A
 }
 
 export async function _getLister<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
-	const res = await authAction('lister/' + data + '/', 'GET');
+	const res = await authAction('lister/id/' + data + '/', 'GET');
 	if (res && res.status < 300) {
 		return { ok: true, data: await res.json() };
 	} else {
 		return await handelUnsuccessfulResponse(res, _getLister, attempts, data);
+	}
+}
+
+export async function _getListerByUsername<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const res = await authAction('lister/username/' + data + '/', 'GET');
+	if (res && res.status < 300) {
+		return { ok: true, data: await res.json() };
+	} else {
+		return await handelUnsuccessfulResponse(res, _getListerByUsername, attempts, data);
 	}
 }
 

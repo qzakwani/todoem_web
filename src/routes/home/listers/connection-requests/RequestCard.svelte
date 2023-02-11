@@ -56,7 +56,7 @@
 			<p
 				class="primary"
 				on:click={() => {
-					$currentLister = req.sender;
+					$currentLister = { lister: req.sender, status: 'received' };
 					goto('/home/listers/lister/' + req.sender.username);
 				}}
 				on:keypress
@@ -68,7 +68,7 @@
 			<p
 				class="primary"
 				on:click={() => {
-					$currentLister = req.sender;
+					$currentLister = { lister: req.sender, status: 'received' };
 					goto('/home/listers/lister/' + req.sender.username);
 				}}
 				on:keypress

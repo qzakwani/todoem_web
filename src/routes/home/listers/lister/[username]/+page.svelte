@@ -1,48 +1,48 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import { currentLister } from '$lib/store';
 	import DisconnectedActions from './DisconnectedActions.svelte';
 	import ReceivedActions from './ReceivedActions.svelte';
 	import SentActions from './SentActions.svelte';
-	export let data: PageData;
-
-	let status = data.connStatus as string;
+	import { Icon, Tooltip } from '$lib/components';
+	import { mdiShieldLock } from '@mdi/js';
 </script>
 
 <div class="container">
-	<h1>@{data.lister.username}</h1>
-	{#if data.lister.name}
-		<h3>{data.lister.name}</h3>
+	<h1>@{$currentLister.lister.username}</h1>
+	{#if $currentLister.lister.name}
+		<h3>{$currentLister.lister.name}</h3>
 	{/if}
 
-	{#if status === 'connected'}
+	{#if $currentLister.status === 'connected'}
 		<!--  -->
-	{:else if status === 'disconnected'}
+	{:else if $currentLister.status === 'disconnected'}
 		<DisconnectedActions
-			id={data.lister.id}
+			id={$currentLister.lister.id}
 			on:statusChange={() => {
-				status = 'sent';
+				$currentLister.status = 'sent';
 			}}
 		/>
-	{:else if status === 'sent'}
+	{:else if $currentLister.status === 'sent'}
 		<SentActions
-			id={data.lister.id}
+			id={$currentLister.lister.id}
 			on:statusChange={() => {
-				status = 'disconnected';
+				$currentLister.status = 'disconnected';
 			}}
 		/>
-	{:else if status === 'received'}
+	{:else if $currentLister.status === 'received'}
 		<ReceivedActions
-			id={data.lister.id}
+			id={$currentLister.lister.id}
 			on:statusChange={(e) => {
-				status = e.detail.newStatus;
+				$currentLister.status = e.detail.newStatus;
 			}}
 		/>
-	{:else if status === 'private'}
-		<!--  -->
+	{:else if $currentLister.status === 'private'}
+		<Tooltip tip="Private" bottom>
+			<Icon path={mdiShieldLock} size={50} />
+		</Tooltip>
 	{:else}
 		<!-- else content here -->
 	{/if}
-	<p>{status}</p>
 </div>
 
 <style>
@@ -51,7 +51,7 @@
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
-		height: 100%;
+		margin-top: 200px;
 		gap: 16px;
 	}
 </style>

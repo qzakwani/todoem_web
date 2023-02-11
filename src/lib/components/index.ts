@@ -8,3 +8,4 @@ export { default as Loading } from './Loading.svelte';
 export { default as SettingButton } from './SettingButton.svelte';
 export { default as Overlay } from './Overlay.svelte';
 export { default as Snackbar } from './Snackbar.svelte';
+export { default as Tooltip } from './Tooltip.svelte';
