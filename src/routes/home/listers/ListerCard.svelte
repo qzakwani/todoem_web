@@ -1,53 +1,11 @@
 <script lang="ts">
 	import type { ConnectedLister } from '$lib/models';
-	import { IconButton, Overlay, Icon } from '$lib/components';
-	import { mdiSend, mdiCancel, mdiAccountPlus, mdiAccountArrowRight } from '@mdi/js';
 	import { goto } from '$app/navigation';
 	import { currentLister } from '$lib/store';
-	import { _disconnectLister, _sendConnectionRequest } from './actions';
-	import { onDestroy } from 'svelte';
-	import { myListers } from '$lib/dataStore';
+	import ListerActions from './ListerActions.svelte';
 
 	export let connLister: ConnectedLister;
-
-	let showDisconnectPrompt = false;
-	let disconnected = false;
-	let sent = false;
-
-	async function disconnectLister() {
-		const res = await _disconnectLister(connLister.lister.id.toString());
-		if (res.ok) {
-			disconnected = true;
-		}
-	}
-
-	async function connectLister() {
-		const res = await _sendConnectionRequest(connLister.lister.id.toString());
-		if (res.ok) {
-			sent = true;
-		}
-	}
-
-	onDestroy(() => {
-		if (disconnected && $myListers.listers) {
-			delete $myListers.listers[connLister.lister.id];
-		}
-	});
 </script>
-
-{#if showDisconnectPrompt}
-	<Overlay
-		title="Disconnect Lister"
-		prompt={`Are you sure you want to disconnect < @${connLister.lister.username} >`}
-		ok="Yes"
-		okAction={disconnectLister}
-		no="Cancel"
-		noAction={(e) => {
-			e.stopPropagation();
-			showDisconnectPrompt = false;
-		}}
-	/>
-{/if}
 
 <div class="card container">
 	<div class="info">
@@ -76,35 +34,7 @@
 			</p>
 		{/if}
 	</div>
-	<div class="actions">
-		{#if disconnected}
-			{#if sent}
-				<div style="padding: 5px;">
-					<Icon path={mdiAccountArrowRight} color="var(--success-clr)" />
-				</div>
-			{:else}
-				<IconButton
-					icon={mdiAccountPlus}
-					pure
-					animate
-					icolor="var(--primary-clr)"
-					on:click={connectLister}
-				/>
-			{/if}
-		{:else}
-			<IconButton icon={mdiSend} icolor="#81b29a" pure animate />
-			<IconButton
-				icon={mdiCancel}
-				icolor="var(--danger-clr)"
-				pure
-				animate
-				on:click={(e) => {
-					e.stopPropagation();
-					showDisconnectPrompt = true;
-				}}
-			/>
-		{/if}
-	</div>
+	<ListerActions lister={connLister.lister} status="connected" />
 </div>
 
 <style>
@@ -132,11 +62,5 @@
 		font-size: 14px;
 		color: gray;
 		margin-top: 4px;
-	}
-
-	.actions {
-		display: flex;
-		align-items: center;
-		gap: 16px;
 	}
 </style>

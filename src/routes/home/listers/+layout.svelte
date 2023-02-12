@@ -58,7 +58,9 @@
 
 <style>
 	section {
-		margin-top: 58px;
+		margin: 58px auto;
+
+		width: 95%;
 	}
 	.container {
 		position: absolute;

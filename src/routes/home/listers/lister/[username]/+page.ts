@@ -7,7 +7,7 @@ export const load = (async ({ params }) => {
 	const un = params.username;
 	const u = get(currentLister);
 	if (u && u.lister.username === un) {
-		if (u.status) {
+		if (u.status !== 'unknown') {
 			return;
 		} else {
 			const res = await _getConnStatus(u.lister.id);

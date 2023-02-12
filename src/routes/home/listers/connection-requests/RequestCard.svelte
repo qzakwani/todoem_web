@@ -1,53 +1,10 @@
 <script lang="ts">
 	import type { ConnectionRequest } from '$lib/models';
-	import { Button, Loading } from '$lib/components';
 	import { goto } from '$app/navigation';
 	import { currentLister } from '$lib/store';
-	import { _acceptConnRequest, _rejectConnRequest } from '../actions';
-	import { connectionRequests, myListers } from '$lib/dataStore';
+	import ListerActions from '../ListerActions.svelte';
 
 	export let req: ConnectionRequest;
-	let processing = false;
-
-	async function acceptLister() {
-		processing = true;
-		const res = await _acceptConnRequest(req.sender.id.toString());
-		if (res.ok) {
-			connectionRequests.update((n) => {
-				if (n.connReqs) {
-					delete n.connReqs[req.sender.id];
-				}
-				return n;
-			});
-			myListers.update((l) => {
-				if (l.listers) {
-					l.listers[req.sender.id] = { id: 1, lister: req.sender, date_connected: '' };
-					return l;
-				} else {
-					l.listers = {};
-					l.listers[req.sender.id] = { id: 1, lister: req.sender, date_connected: '' };
-					return l;
-				}
-			});
-		} else {
-			processing = false;
-		}
-	}
-
-	async function rejectLister() {
-		processing = true;
-		const res = await _rejectConnRequest(req.sender.id.toString());
-		if (res.ok) {
-			connectionRequests.update((n) => {
-				if (n.connReqs) {
-					delete n.connReqs[req.sender.id];
-				}
-				return n;
-			});
-		} else {
-			processing = false;
-		}
-	}
 </script>
 
 <div class="card container">
@@ -78,10 +35,7 @@
 		{/if}
 	</div>
 	<div class="actions">
-		{#if !processing}
-			<Button outlined success on:click={acceptLister}>Accept</Button>
-			<Button outlined danger on:click={rejectLister}>Reject</Button>
-		{/if}
+		<ListerActions lister={req.sender} status="received" />
 	</div>
 </div>
 

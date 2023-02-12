@@ -13,6 +13,18 @@ export const myListers = writable<{
 	currentPage: 1
 });
 
+export const myListersSearch = writable<{
+	search: string;
+	result: Record<number, ConnectedLister> | null;
+	next: boolean;
+	currentPage: number;
+}>({
+	search: '',
+	result: null,
+	next: false,
+	currentPage: 1
+});
+
 export const connectionRequests = writable<{
 	connReqs: Record<number, ConnectionRequest> | null;
 	next: boolean;

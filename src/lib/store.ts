@@ -12,7 +12,7 @@ export const searchPages = writable<{
 	search: string;
 	next: boolean;
 }>({ results: null, currentPage: 1, search: '', next: false });
-export const currentLister = writable<{ lister: Lister; status?: string }>();
+export const currentLister = writable<{ lister: Lister; status: string }>();
 
 function getCredentials() {
 	if (browser) {

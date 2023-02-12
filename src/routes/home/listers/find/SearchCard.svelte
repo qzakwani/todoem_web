@@ -5,7 +5,7 @@
 	export let lister: Lister;
 
 	function navigateToLister() {
-		$currentLister = { lister };
+		$currentLister = { lister, status: 'unknown' };
 		goto('/home/listers/lister/' + lister.username);
 	}
 </script>

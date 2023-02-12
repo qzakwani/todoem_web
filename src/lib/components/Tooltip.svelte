@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let top = false;
+	export let top = true;
 	export let bottom = false;
 	export let left = false;
 	export let right = false;
@@ -23,6 +23,7 @@
 		border-style: solid;
 		opacity: 0;
 		transition: opacity 300ms ease-out;
+		transition-delay: 300ms;
 	}
 
 	.tip {
@@ -37,6 +38,7 @@
 		min-width: 100px;
 		text-align: center;
 		transition: opacity 300ms ease-out;
+		transition-delay: 300ms;
 	}
 
 	.tooltip:hover .tip,
