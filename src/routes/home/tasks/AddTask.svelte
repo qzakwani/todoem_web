@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { _addTask } from './actions';
 	import { IconButton, Button } from '$lib/components/index';
-	import { mdiPlus, mdiRepeatVariant, mdiMinus } from '@mdi/js';
+	import { mdiPlus, mdiMinus } from '@mdi/js';
 	import { theme } from '$lib/store';
 	import { scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';

@@ -10,7 +10,6 @@
 	} from './actions';
 	import { IconButton, Overlay, Icon, Tooltip, Loading } from '$lib/components';
 	import {
-		mdiSend,
 		mdiCancel,
 		mdiAccountPlus,
 		mdiAccountArrowRight,
@@ -108,9 +107,6 @@
 			/>
 		</Tooltip>
 	{:else if status === 'connected'}
-		<Tooltip tip="Send Tasklist">
-			<IconButton icon={mdiSend} icolor="#81b29a" pure animate {size} />
-		</Tooltip>
 		<Tooltip tip="Disconnect">
 			<IconButton
 				icon={mdiCancel}

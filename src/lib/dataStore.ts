@@ -1,7 +1,9 @@
 import { writable } from 'svelte/store';
-import type { Task, ConnectedLister, ConnectionRequest } from './models';
+import type { Task, TaskList, SentTaskList, ConnectedLister, ConnectionRequest } from './models';
 
 export const tasks = writable<Record<string, Task | string> | null>(null);
+export const tasklists = writable<{ next: boolean; tasklists: TaskList[] } | null>(null);
+export const sentTasklists = writable<{ next: boolean; tasklists: SentTaskList[] } | null>(null);
 
 export const myListers = writable<{
 	listers: Record<number, ConnectedLister> | null;

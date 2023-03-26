@@ -52,11 +52,13 @@ export interface SentTaskList extends Model {
 
 export interface TempSentTaskList {
 	name: string;
-	delivered: boolean;
-	sender: number;
 	receiver: number;
-	tasks_num: number;
 	description: string;
+	tasks: TempSentTaskListTask[];
+}
+
+export interface TempSentTaskListTask {
+	task: string;
 }
 
 export interface SentTaskListTask extends Model {

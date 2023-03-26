@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { ConnectedLister } from '$lib/models';
 	import { _getMyListers } from './actions';
-	import { myListers, myListersSearch } from '$lib/dataStore';
+	import { myListers } from '$lib/dataStore';
 	import ListerCard from './ListerCard.svelte';
 	import { IconButton, Loading } from '$lib/components';
 	import { mdiChevronDown, mdiMagnify } from '@mdi/js';
 	import { isEmpty } from '$lib/utils';
+	import { goto } from '$app/navigation';
 
 	let fetching = false;
 
@@ -26,16 +27,13 @@
 	}
 </script>
 
-<div class="search">
-	<div class="flex">
-		<input type="text" bind:value={$myListersSearch.search} placeholder="Search My Listers" />
-		<IconButton icon={mdiMagnify} animate />
-	</div>
-
-	<div class="search-result">
-		<h3>Hello</h3>
-		<h3>Yo</h3>
-	</div>
+<div style="padding-bottom: 12px;">
+	<IconButton
+		icon={mdiMagnify}
+		on:click={() => {
+			goto('/home/listers/search');
+		}}
+	/>
 </div>
 
 {#if $myListers.listers !== null && !isEmpty($myListers.listers)}
@@ -75,30 +73,5 @@
 		width: 100%;
 		display: flex;
 		justify-content: center;
-	}
-
-	.search {
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		gap: 8px;
-		margin-bottom: 16px;
-	}
-
-	input {
-		opacity: 0.5;
-		width: 20%;
-		transition: all 300ms ease-out;
-	}
-
-	input:focus {
-		opacity: 1;
-		width: 50%;
-	}
-
-	.search-result {
-		height: 0;
-		transition: all 300ms;
-		overflow: hidden;
 	}
 </style>

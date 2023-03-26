@@ -15,7 +15,7 @@
 	} from '@mdi/js';
 
 	const Paths = {
-		dashboard: '/home',
+		home: '/home',
 		tasks: '/home/tasks',
 		tasklist: '/home/tasklist',
 		taskgroup: '/home/taskgroup',
@@ -66,26 +66,26 @@
 		<aside>
 			<MenuButton
 				icon={mdiHome}
-				on:click={() => goto(Paths.dashboard)}
-				selected={$page.route.id === Paths.dashboard}>Home</MenuButton
+				on:click={() => goto(Paths.home)}
+				selected={$page.route.id === Paths.home}>Home</MenuButton
 			>
 			<MenuButton
 				icon={mdiCheckCircleOutline}
 				icolor="#3d405b"
 				on:click={() => goto(Paths.tasks)}
-				selected={$page.route.id === Paths.tasks}>Tasks</MenuButton
+				selected={$page.route.id?.startsWith(Paths.tasks)}>Tasks</MenuButton
 			>
 			<MenuButton
 				icon={mdiFormatListBulleted}
 				icolor="#81b29a"
 				on:click={() => goto(Paths.tasklist)}
-				selected={$page.route.id === Paths.tasklist}>Tasklist</MenuButton
+				selected={$page.route.id?.startsWith(Paths.tasklist)}>Tasklist</MenuButton
 			>
 			<MenuButton
 				icon={mdiFormatListGroup}
 				icolor="#e07a5f"
 				on:click={() => goto(Paths.taskgroup)}
-				selected={$page.route.id === Paths.taskgroup}>Taskgroup</MenuButton
+				selected={$page.route.id?.startsWith(Paths.taskgroup)}>Taskgroup</MenuButton
 			>
 			<MenuButton
 				icon={mdiAccountGroupOutline}
