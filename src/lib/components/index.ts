@@ -9,4 +9,3 @@ export { default as SettingButton } from './SettingButton.svelte';
 export { default as Overlay } from './Overlay.svelte';
 export { default as Snackbar } from './Snackbar.svelte';
 export { default as Tooltip } from './Tooltip.svelte';
-export { default as SelectLister } from './todoem/SelectLister.svelte';

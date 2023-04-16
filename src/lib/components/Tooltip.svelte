@@ -22,6 +22,7 @@
 		border-width: 5px;
 		border-style: solid;
 		opacity: 0;
+		visibility: hidden;
 		transition: opacity 300ms ease-out;
 		transition-delay: 300ms;
 	}
@@ -29,6 +30,7 @@
 	.tip {
 		position: absolute;
 		opacity: 0;
+		visibility: hidden;
 		padding: 8px 12px;
 		font-size: 12px;
 		font-weight: 500;
@@ -43,6 +45,7 @@
 
 	.tooltip:hover .tip,
 	.tooltip:hover.tooltip::before {
+		visibility: visible;
 		opacity: 1;
 	}
 

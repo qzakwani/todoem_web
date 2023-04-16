@@ -103,3 +103,17 @@ export async function _disconnectLister<Type>(data?: Type, attempts = 0): Promis
 		return await handelUnsuccessfulResponse(res, _disconnectLister, attempts, data);
 	}
 }
+
+export async function _searchMyListers<Type>(data?: Type, attempts = 0): Promise<APIResponse> {
+	const d = data as { search: FormData; page: number };
+	const res = await authAction(
+		'lister/my-listers/search/?page=' + d.page.toString(),
+		'POST',
+		d.search
+	);
+	if (res && res.status < 300) {
+		return { ok: true, data: await res.json() };
+	} else {
+		return await handelUnsuccessfulResponse(res, _searchMyListers, attempts, data);
+	}
+}

@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { _sendTasklists } from '../actions';
-	import type { TempSentTaskList } from '$lib/models';
-	import { Button, SelectLister, IconButton } from '$lib/components';
+	import type { TempSentTaskList, ConnectedLister } from '$lib/models';
+	import { Button, IconButton } from '$lib/components';
 	import { mdiPlus, mdiCloseBox } from '@mdi/js';
 	import { goto } from '$app/navigation';
+	import SelectLister from './SelectLister.svelte';
+	import { listen } from 'svelte/internal';
 
 	let error = '';
+	let to: ConnectedLister;
 
 	let temp: TempSentTaskList = {
 		name: 'Task List',
@@ -60,7 +63,10 @@
 	</div>
 	<div class="entry">
 		<label for="">To</label>
-		<SelectLister />
+		{#if to}
+			<p>{to.lister.name ? to.lister.name : to.lister.username}</p>
+		{/if}
+		<SelectLister bind:selected={to} />
 	</div>
 
 	<div class="send" style="text-align: right;">

@@ -2,17 +2,16 @@
 	import { myListers } from '$lib/dataStore';
 	import type { ConnectedLister } from '$lib/models';
 	import { IconButton } from '$lib/components';
-	import { mdiAccountArrowRight } from '@mdi/js';
+	import { mdiAccountArrowRight, mdiMagnify } from '@mdi/js';
 
-	const l = $myListers.listers as Record<number, ConnectedLister>;
+	const l = ($myListers.listers as Record<number, ConnectedLister>) || [];
 
 	let result: ConnectedLister[] = [];
 
+	export let selected: ConnectedLister;
+
 	let search = '';
 	let select = false;
-	let selected = false;
-
-	$: console.log(result);
 
 	async function searchLocal() {
 		result = [];
@@ -23,10 +22,6 @@
 		}
 	}
 </script>
-
-{#each result as item, i (i)}
-	<p>{item.lister.username}</p>
-{/each}
 
 <section>
 	{#if select}
@@ -40,13 +35,23 @@
 			}}
 		/>
 		<div class="select card" class:animate={select}>
-			<input type="text" bind:value={search} on:keyup={searchLocal} />
+			<div class="form">
+				<input type="text" bind:value={search} on:keyup={searchLocal} />
+				<IconButton icon={mdiMagnify} on:click={() => {}} />
+			</div>
 			{#each Object.entries(l) as [k, connLister] (k)}
-				<p>{connLister.lister.username}</p>
+				<p
+					on:keyup
+					class="choice"
+					on:click={() => {
+						selected = connLister;
+						select = false;
+					}}
+				>
+					{connLister.lister.name ? connLister.lister.name : connLister.lister.username}
+				</p>
 			{/each}
 		</div>
-	{:else if selected}
-		<p />
 	{:else}
 		<IconButton
 			icon={mdiAccountArrowRight}
@@ -82,9 +87,33 @@
 			height: 0;
 		}
 		to {
-			width: 200px;
+			width: 300px;
 			height: auto;
+			overflow-y: auto;
 			max-height: 70vh;
 		}
+	}
+
+	.choice {
+		padding: 8px 12px;
+		margin-bottom: 5px;
+		background-color: var(--bg-clr-sec);
+		cursor: pointer;
+	}
+
+	.choice:hover {
+		color: white;
+		background-color: var(--primary-clr);
+	}
+
+	.form {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		margin-bottom: 12px;
+	}
+
+	input {
+		flex: 1;
 	}
 </style>

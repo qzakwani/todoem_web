@@ -6,9 +6,10 @@
 	import { IconButton, Loading } from '$lib/components';
 	import { mdiChevronDown, mdiMagnify } from '@mdi/js';
 	import { isEmpty } from '$lib/utils';
-	import { goto } from '$app/navigation';
+	import Search from './Search.svelte';
 
 	let fetching = false;
+	let search = false;
 
 	async function getMyListers() {
 		fetching = true;
@@ -27,38 +28,42 @@
 	}
 </script>
 
-<div style="padding-bottom: 12px;">
-	<IconButton
-		icon={mdiMagnify}
-		on:click={() => {
-			goto('/home/listers/search');
-		}}
-	/>
-</div>
-
-{#if $myListers.listers !== null && !isEmpty($myListers.listers)}
-	<div class="listers">
-		{#each Object.entries($myListers.listers) as [id, connLister] (id)}
-			<ListerCard {connLister} />
-		{/each}
-	</div>
-{:else if $myListers.listers && isEmpty($myListers.listers)}
-	<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
-		You don't have any listers connected.
-	</h4>
+{#if search}
+	<Search bind:search />
 {:else}
-	<h4 style="color: var(--danger-clr); font-style: italic; text-align:center; width: 100%">
-		Something went wrong. Please RELOAD!
-	</h4>
-{/if}
+	<div style="padding-bottom: 12px;">
+		<IconButton
+			icon={mdiMagnify}
+			on:click={() => {
+				search = true;
+			}}
+		/>
+	</div>
 
-<div class="nav-page">
-	{#if fetching}
-		<Loading />
-	{:else if $myListers.next}
-		<IconButton icon={mdiChevronDown} on:click={getMyListers} />
+	{#if $myListers.listers !== null && !isEmpty($myListers.listers)}
+		<div class="listers">
+			{#each Object.entries($myListers.listers) as [id, connLister] (id)}
+				<ListerCard {connLister} />
+			{/each}
+		</div>
+	{:else if $myListers.listers && isEmpty($myListers.listers)}
+		<h4 style="color: gray; font-style: italic; text-align:center; width: 100%">
+			You don't have any listers connected.
+		</h4>
+	{:else}
+		<h4 style="color: var(--danger-clr); font-style: italic; text-align:center; width: 100%">
+			Something went wrong. Please RELOAD!
+		</h4>
 	{/if}
-</div>
+
+	<div class="nav-page">
+		{#if fetching}
+			<Loading />
+		{:else if $myListers.next}
+			<IconButton icon={mdiChevronDown} on:click={getMyListers} />
+		{/if}
+	</div>
+{/if}
 
 <style>
 	.listers {
